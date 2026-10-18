@@ -1,0 +1,81 @@
+0 HEAD
+1 SOUR BERCEAU
+1 GEDC
+2 VERS 5.5.1
+2 FORM LINEAGE-LINKED
+1 CHAR UTF-8
+1 NOTE Jeu de démonstration entièrement fictif, créé pour Berceau.
+0 @S1@ SOUR
+1 TITL Carnet fictif de démonstration
+1 PUBL Créé pour tester les sources dans Berceau
+0 @I1@ INDI
+1 NAME Lior /Brumeclair/
+1 SEX M
+1 BIRT
+2 DATE 14 AUG 2005
+2 PLAC Val-des-Lucioles (lieu fictif)
+1 FAMC @F2@
+1 SOUR @S1@
+2 PAGE Exemple de référence fictive
+0 @I2@ INDI
+1 NAME Mira /Brumeclair/
+1 SEX F
+1 BIRT
+2 DATE 22 APR 2009
+2 PLAC Val-des-Lucioles (lieu fictif)
+1 FAMC @F2@
+0 @I3@ INDI
+1 NAME Mila /Brumeclair/
+1 SEX F
+1 BIRT
+2 DATE 3 MAR 1977
+2 PLAC Boisdesonge (lieu fictif)
+1 FAMC @F1@
+1 FAMS @F2@
+1 NOTE Personnage fictif créé pour la démonstration.
+0 @I4@ INDI
+1 NAME Théo /Ruisseclair/
+1 SEX M
+1 BIRT
+2 DATE 19 OCT 1975
+2 PLAC Val-des-Lucioles (lieu fictif)
+1 FAMS @F2@
+0 @I5@ INDI
+1 NAME Alba /Brumeclair/
+1 SEX F
+1 BIRT
+2 DATE 8 FEB 1954
+2 PLAC Boisdesonge (lieu fictif)
+1 FAMS @F1@
+0 @I6@ INDI
+1 NAME Nils /Brumeclair/
+1 SEX M
+1 BIRT
+2 DATE 27 JUN 1951
+2 PLAC Boisdesonge (lieu fictif)
+1 FAMS @F1@
+0 @I7@ INDI
+1 NAME Nina /Brumeclair/
+1 SEX F
+1 BIRT
+2 DATE 9 JAN 1979
+2 PLAC Boisdesonge (lieu fictif)
+1 FAMC @F1@
+0 @F1@ FAM
+1 HUSB @I6@
+1 WIFE @I5@
+1 MARR
+2 DATE 4 JUN 1972
+2 PLAC Val-des-Lucioles (lieu fictif)
+1 CHIL @I3@
+1 CHIL @I7@
+0 @F2@ FAM
+1 HUSB @I4@
+1 WIFE @I3@
+1 MARR
+2 DATE 12 SEP 2002
+2 PLAC Val-des-Lucioles (lieu fictif)
+1 NOTE Union fictive créée pour tester l'import des mariages.
+1 CHIL @I1@
+1 CHIL @I2@
+0 TRLR

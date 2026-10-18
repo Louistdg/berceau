@@ -1,0 +1,20 @@
+# Archives locales : elles peuvent contenir des données familiales réelles.
+/sauvegardes/
+/_ancien-prototype/
+
+# Sauvegardes exportées et configuration locale.
+*.berceau
+.env
+.env.*
+
+# Dépendances et fichiers temporaires.
+node_modules/
+*.log
+
+# Fichiers historiques ou annexes conservés hors du dépôt public.
+/app/index.origine.html
+/data/demo-arbre.json
+/maquettes/
+/outputs/
+/work/
+/checkpoint-*/

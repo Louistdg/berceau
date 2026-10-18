@@ -1,0 +1,272 @@
+/* ==========================================================================
+   Arbre familial — design system
+   --------------------------------------------------------------------------
+   Un seul fichier de tokens pour toute l'application : les 8 thèmes, la
+   typographie, et les composants de base (boutons, cartes, fenêtres, champs).
+
+   Règle : AUCUNE couleur en dur dans les autres fichiers CSS. On utilise
+   les variables ci-dessous. Un thème change tout, d'un seul attribut.
+
+   Lisibilité : la cible est une famille dont les grands-parents vont se servir.
+   Corps de texte 17 px minimum, cibles 44 px, contrastes vérifiés.
+   ========================================================================== */
+
+:root {
+  /* --- Thème par défaut : « Papier » (crème chaleureux) ------------------ */
+  /* fond adouci : plus de blanc pur, qui éblouit sur un grand écran */
+  --ink: #1f3830;
+  --muted: #57655e;
+  --papier: #eeece3;
+  --blanc: #f8f5ec;
+  --ligne: #dcd9cc;
+  --vert: #275447;
+  --vert-clair: #e3e9df;
+  --or: #a98547;
+  --carte: #fdfaf2;
+  --carte-bord: #d3cfc0;
+  --ombre: 0 10px 30px #24372b14;
+  --voile: #1d302ab0;
+  --fond-colonne: #f4f1e7;
+  --fond-toile: #e9e6db;
+  --pointille: #cdc9b9;
+
+  /* --- Mesures communes ------------------------------------------------- */
+  --r: 14px;          /* rayon des cartes */
+  --r-petit: 10px;    /* rayon des boutons */
+  --espace: 16px;
+  --cible: 44px;      /* taille minimale d'une zone cliquable */
+  --texte: 17px;      /* corps de texte */
+  --titre-carte: 19px;
+  --police: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+}
+
+/* ==========================================================================
+   Les thèmes. L'attribut data-theme est posé sur <html>.
+   L'absence d'attribut = « Papier » (défini dans :root ci-dessus).
+   ========================================================================== */
+
+[data-theme='ivoire'] {
+  --ink: #2c2c29; --muted: #6d6b64; --papier: #faf7f0; --blanc: #fffdf8;
+  --ligne: #e6e1d6; --vert: #3f5148; --vert-clair: #eef0ea; --or: #b08f5a;
+  --carte: #fffdf8; --carte-bord: #e2ddd0; --ombre: 0 10px 30px #2c2c290f;
+  --voile: #2c2c29a6; --fond-colonne: #fdfaf3; --fond-toile: #fcf9f2; --pointille: #e2ddd2;
+}
+
+[data-theme='sepia'] {
+  --ink: #3b2e1d; --muted: #6f5c42; --papier: #f2e9d6; --blanc: #faf4e6;
+  --ligne: #ddd0b6; --vert: #6a5330; --vert-clair: #ece2cc; --or: #a8823f;
+  --carte: #fdf7ea; --carte-bord: #cdbfa4; --ombre: 0 10px 30px #3b2e1d14;
+  --voile: #3b2e1da6; --fond-colonne: #f6efdf; --fond-toile: #f5edda; --pointille: #d9cbaf;
+}
+
+[data-theme='sauge'] {
+  --ink: #22322a; --muted: #54685c; --papier: #edf2ea; --blanc: #f8fbf6;
+  --ligne: #d5e0d3; --vert: #2f5c45; --vert-clair: #e2ece0; --or: #b5964f;
+  --carte: #fbfdfa; --carte-bord: #cfdacd; --ombre: 0 10px 30px #22322a12;
+  --voile: #22322aa6; --fond-colonne: #f1f6ee; --fond-toile: #f0f5ed; --pointille: #cfd9cd;
+}
+
+/* --- Les trois thèmes sombres ------------------------------------------- */
+/* nuit : vert-bouteille chaud, comme une lampe dans une piece sombre */
+[data-theme='nuit'] {
+  --ink: #f1ecdd; --muted: #aca695; --papier: #1f211c; --blanc: #292c25;
+  --ligne: #3d4139; --vert: #9ec5a8; --vert-clair: #2f342c; --or: #dcb87a;
+  --carte: #363a30; --carte-bord: #606a58; --ombre: 0 14px 34px #00000050;
+  --voile: #000000b8; --fond-colonne: #23261f; --fond-toile: #1a1c17; --pointille: #363b32;
+}
+
+/* graphite : un brun-gris chaud, plus chaleureux qu'un gris pur */
+[data-theme='graphite'] {
+  --ink: #f3ecdd; --muted: #ada392; --papier: #211d18; --blanc: #2c2720;
+  --ligne: #3f382e; --vert: #a9c6b0; --vert-clair: #322b23; --or: #dcb87c;
+  --carte: #3a3228; --carte-bord: #5d5343; --ombre: 0 14px 34px #00000055;
+  --voile: #000000b8; --fond-colonne: #292319; --fond-toile: #1b1713; --pointille: #37302a;
+}
+
+/* ardoise : bleu-gris, on garde l'ambiance froide mais on eclaircit la carte */
+[data-theme='ardoise'] {
+  --ink: #eaf0f8; --muted: #a6b0bf; --papier: #1b2029; --blanc: #232935;
+  --ligne: #38404e; --vert: #96b9de; --vert-clair: #29303c; --or: #d9be80;
+  --carte: #2f3745; --carte-bord: #5f6a7e; --ombre: 0 14px 34px #00000050;
+  --voile: #000000bd; --fond-colonne: #1e242e; --fond-toile: #171b23; --pointille: #313846;
+}
+
+/* --- Contraste maximal --------------------------------------------------- */
+[data-theme='contraste'] {
+  --ink: #000000; --muted: #333333; --papier: #ffffff; --blanc: #ffffff;
+  --ligne: #8a8a8a; --vert: #0b3b2c; --vert-clair: #eef2ee; --or: #7a5c1e;
+  --carte: #ffffff; --carte-bord: #6a6a6a; --ombre: none;
+  --voile: #000000b3; --fond-colonne: #ffffff; --fond-toile: #ffffff; --pointille: #bbbbbb;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--papier);
+  color: var(--ink);
+  font-family: var(--police);
+  font-size: var(--texte);
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+h1, h2, h3 { line-height: 1.2; margin: 0 0 8px; }
+h1 { font-size: 30px; }
+h2 { font-size: 23px; }
+h3 { font-size: 19px; }
+p { margin: 0 0 12px; }
+
+a { color: var(--vert); text-underline-offset: 3px; }
+
+/* Le focus doit toujours se voir : c'est la seule façon de savoir où on est
+   quand on navigue au clavier. */
+:focus-visible {
+  outline: 2px solid var(--vert);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Les textes secondaires ne descendent jamais sous --muted : c'est le gris
+   le plus clair autorisé (contraste vérifié à 4,5:1 minimum). */
+.secondaire { color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* ==========================================================================
+   Boutons
+   ========================================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: var(--cible);
+  padding: 10px 16px;
+  border: 1px solid var(--ligne);
+  border-radius: var(--r-petit);
+  background: var(--blanc);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn:hover { border-color: var(--vert); }
+.btn:disabled { opacity: .5; cursor: default; }
+
+/* Un seul bouton principal par écran : c'est celui qu'on doit trouver sans lire. */
+.btn-principal {
+  background: var(--vert);
+  border-color: var(--vert);
+  color: #fff;
+  font-weight: 600;
+}
+.btn-principal:hover { filter: brightness(1.08); }
+
+.btn-grand { min-height: 54px; padding: 14px 24px; font-size: 17px; }
+.btn-discret { border-color: transparent; background: transparent; }
+
+/* ==========================================================================
+   Cartes et fenêtres
+   ========================================================================== */
+
+.carte {
+  background: var(--carte);
+  border: 1px solid var(--carte-bord);
+  border-radius: var(--r);
+  box-shadow: var(--ombre);
+  padding: var(--espace);
+}
+
+/* La fenêtre modale : fond assombri, panneau centré, titre et croix. */
+.voile {
+  position: fixed;
+  inset: 0;
+  background: var(--voile);
+  display: none;
+  place-items: center;
+  padding: 18px;
+  z-index: 50;
+}
+.voile.ouvert { display: grid; }
+
+.fenetre {
+  width: min(560px, 96vw);
+  max-height: 90vh;
+  overflow: auto;
+  background: var(--blanc);
+  color: var(--ink);
+  border-radius: var(--r);
+  box-shadow: var(--ombre);
+  padding: 20px;
+}
+.fenetre-entete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.fenetre-titre { font-size: 20px; font-weight: 700; margin: 0; }
+.fenetre-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; flex-wrap: wrap; }
+
+/* ==========================================================================
+   Champs de formulaire
+   ========================================================================== */
+
+.champ { display: block; margin-bottom: 14px; }
+.champ > span { display: block; font-size: 14px; color: var(--muted); margin-bottom: 6px; }
+.champ input,
+.champ select,
+.champ textarea {
+  width: 100%;
+  min-height: var(--cible);
+  padding: 10px 12px;
+  border: 1px solid var(--ligne);
+  border-radius: var(--r-petit);
+  background: var(--blanc);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+}
+.champ textarea { min-height: 90px; resize: vertical; }
+.champ input:focus, .champ select:focus, .champ textarea:focus { border-color: var(--vert); }
+
+/* ==========================================================================
+   Pastille de couleur (aperçu d'un thème)
+   ========================================================================== */
+
+.pastille {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid #00000033;
+  vertical-align: middle;
+}
+
+/* ==========================================================================
+   Role semantique : la serif des noms, le rouge des actions irreversibles,
+   le surlignage des anniversaires. Les valeurs suivent chaque ambiance.
+   ========================================================================== */
+
+:root, [data-theme='ivoire'] {
+  --police-titre: Georgia, 'Times New Roman', serif;
+  --danger: #9c3a2e;
+  --surlignage: #f3e6c8;
+}
+[data-theme='sepia'] { --danger: #8f3226; --surlignage: #eadfc0; }
+[data-theme='sauge'] { --danger: #96413a; --surlignage: #dfe9d8; }
+[data-theme='nuit'] { --danger: #e0716a; --surlignage: #3a382c; }
+[data-theme='graphite'] { --danger: #e07a72; --surlignage: #38372f; }
+[data-theme='ardoise'] { --danger: #e58079; --surlignage: #2f3540; }
+[data-theme='contraste'] { --danger: #a11212; --surlignage: #ffff99; }

@@ -15,7 +15,7 @@ Les arbres, corrections et ajouts restent dans le navigateur de l’appareil. Un
 ## État de la copie commerciale
 
 - Arbre interactif, fiches, recherche, consultation, thèmes et gestion locale de plusieurs arbres.
-- Import et export GEDCOM, dont événements, notes, sources, mariages et références de média prises en charge par le convertisseur.
+- Import et export GEDCOM dans l'application principale, avec les événements, notes, sources, mariages et chemins de médias pris en charge.
 - Ajout et correction locale sans code serveur pour les arbres locaux.
 - Photos optimisées, stockées dans IndexedDB.
 - Sauvegarde et restauration .berceau.
@@ -33,6 +33,6 @@ sauvegardes/, _ancien-prototype/, app/index.origine.html, les checkpoints et les
 - VERIFICATION-AVANT-COMMERCIALISATION.md : état des vérifications et éléments encore à démontrer.
 - AUDIT-GROK-2026-10-18.md : constats reçus et suivi des corrections.
 - missions/A-FAIRE/ : mission B1-08 encore en attente.
-- design/ : règles et jetons de présentation.
+- design/tokens.css : variables visuelles du prototype.
 
 Ne déploie pas depuis ce dépôt sans décision explicite.

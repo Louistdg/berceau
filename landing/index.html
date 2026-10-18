@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Berceau — l'histoire de votre famille, enfin lisible</title>
+<meta name="description" content="Un site privé pour votre famille : l'arbre généalogique, les dates, les lieux, les histoires. Pensé pour être lu par les grands-parents.">
+<!-- Le thème est posé avant l'affichage, sinon on voit un flash. -->
+<script>
+try {
+  var t = localStorage.getItem('berceau-theme');
+  if (t && t !== 'papier') document.documentElement.setAttribute('data-theme', t);
+} catch (e) {}
+</script>
+<link rel="stylesheet" href="../design/tokens.css">
+<style>
+  /* --- Mise en page de la présentation (rien de générique ici) ---------- */
+  .bande { max-width: 1060px; margin: 0 auto; padding: 0 20px; }
+  .entete {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--papier) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--ligne);
+  }
+  .entete .bande { display: flex; align-items: center; gap: 14px; min-height: 64px; }
+  .marque { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 19px; letter-spacing: .2px; }
+  .marque svg { width: 28px; height: 28px; }
+  .marque small { display: block; font-size: 10.5px; font-weight: 500; color: var(--muted); letter-spacing: .14em; text-transform: uppercase; }
+  .nav { margin-left: auto; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .nav a { color: var(--muted); text-decoration: none; padding: 8px 10px; border-radius: 8px; font-size: 15px; }
+  .nav a:hover { color: var(--ink); background: var(--vert-clair); }
+  /* Le bouton du bandeau héritait du gris du menu (illisible sur le vert) :
+     on lui rend son texte blanc. */
+  .nav a.btn { color: #fff; }
+
+  /* Les 8 pastilles de thème : une démonstration, pas un gadget. */
+  .themes { display: flex; gap: 6px; padding: 0 8px; border-left: 1px solid var(--ligne); margin-left: 6px; }
+  .themes button {
+    width: 26px; height: 26px; min-height: 26px; padding: 0; border-radius: 50%;
+    border: 1px solid var(--ligne); cursor: pointer; background: var(--papier);
+  }
+  .themes button[aria-pressed='true'] { box-shadow: 0 0 0 2px var(--vert); }
+
+  header.entete .btn { margin-left: 6px; }
+
+  /* --- Héros ------------------------------------------------------------ */
+  .heros { padding: 56px 0 40px; display: grid; grid-template-columns: 1.05fr .95fr; gap: 44px; align-items: center; }
+  .heros h1 { font-size: clamp(30px, 4.4vw, 46px); letter-spacing: -.01em; margin-bottom: 14px; }
+  .heros .sous { font-size: 19px; color: var(--muted); max-width: 34em; }
+  .heros .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
+  .heros .preuve { margin-top: 18px; font-size: 14px; color: var(--muted); }
+
+  /* --- Maquette de l'arbre (dessinée, pas une capture) ------------------ */
+  .maquette { position: relative; }
+  .maquette .carte { position: absolute; width: 168px; padding: 11px 12px; }
+  .maquette .carte b { display: block; font-size: 15px; line-height: 1.25; }
+  .maquette .carte span { display: block; font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .maquette .badge {
+    position: absolute; right: -7px; top: -7px; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--vert); color: #fff; display: grid; place-items: center;
+    font-size: 15px; font-weight: 700; border: 2px solid var(--carte);
+  }
+  .maquette .scene { position: relative; height: 330px; }
+  .maquette .legende {
+    position: absolute; left: 0; right: 0; bottom: 0; text-align: center;
+    font-size: 12.5px; color: var(--muted);
+  }
+
+  /* --- Sections --------------------------------------------------------- */
+  section { padding: 46px 0; }
+  section h2 { font-size: 27px; margin-bottom: 6px; }
+  section .intro { color: var(--muted); max-width: 44em; margin-bottom: 26px; }
+  .grille-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .atout { padding: 20px; }
+  .atout .icone {
+    width: 42px; height: 42px; border-radius: 12px; background: var(--vert-clair);
+    display: grid; place-items: center; font-size: 21px; margin-bottom: 12px;
+  }
+  .atout h3 { font-size: 18px; margin-bottom: 6px; }
+  .atout p { margin: 0; font-size: 15.5px; color: var(--muted); }
+
+  .etapes { counter-reset: e; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .etape { padding: 20px; position: relative; }
+  .etape:before {
+    counter-increment: e; content: counter(e);
+    position: absolute; top: -14px; left: 18px; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--vert); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 15px;
+  }
+  .etape h3 { margin-top: 10px; font-size: 17px; }
+  .etape p { margin: 0; font-size: 15px; color: var(--muted); }
+
+  /* --- Prix ------------------------------------------------------------- */
+  .prix { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; }
+  .offre { padding: 22px; display: flex; flex-direction: column; gap: 10px; }
+  .offre.mise { border-color: var(--vert); border-width: 2px; }
+  .offre .etiquette {
+    align-self: flex-start; font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--vert); font-weight: 700;
+  }
+  .offre .montant { font-size: 32px; font-weight: 700; line-height: 1; }
+  .offre .montant small { font-size: 15px; font-weight: 500; color: var(--muted); }
+  .offre ul { margin: 4px 0 12px; padding-left: 20px; font-size: 15px; color: var(--muted); }
+  .offre li { margin-bottom: 5px; }
+  .offre .btn { margin-top: auto; }
+
+  /* --- Questions -------------------------------------------------------- */
+  details.question { border-bottom: 1px solid var(--ligne); padding: 14px 2px; }
+  details.question summary { cursor: pointer; font-weight: 600; font-size: 16.5px; }
+  details.question p { margin: 10px 0 0; color: var(--muted); font-size: 15.5px; }
+
+  /* --- Pied ------------------------------------------------------------- */
+  footer { border-top: 1px solid var(--ligne); padding: 26px 0 34px; margin-top: 10px; }
+  footer .bande { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; justify-content: space-between; font-size: 13.5px; color: var(--muted); }
+
+  @media (max-width: 900px) {
+    .heros { grid-template-columns: 1fr; gap: 26px; padding-top: 34px; }
+    .maquette { display: none; }
+    .grille-3, .etapes, .prix { grid-template-columns: 1fr; }
+    .nav a { padding: 8px 6px; font-size: 14px; }
+    .themes { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="entete">
+  <div class="bande">
+    <div class="marque">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+        <path d="M12 21V11"/><circle cx="12" cy="7" r="3.2"/><path d="M12 11c-3 0-5 1.6-5 4M12 11c3 0 5 1.6 5 4"/>
+      </svg>
+      <div>Berceau<small>Histoires de famille</small></div>
+    </div>
+    <nav class="nav">
+      <a href="#comment">Comment ça marche</a>
+      <a href="#prix">Version</a>
+      <a href="#questions">Questions</a>
+      <div class="themes" id="themes" role="group" aria-label="Ambiance de couleurs"></div>
+      <a class="btn btn-principal" href="../app/index.html">Créer mon arbre</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- ===================== Héros ===================== -->
+  <div class="bande">
+    <div class="heros">
+      <div>
+        <h1>L'histoire de votre famille,<br>enfin lisible.</h1>
+        <p class="sous">
+          Un prototype local pour créer, consulter et sauvegarder un arbre familial sur cet appareil.
+          Conçu pour être lu <strong>par les grands-parents</strong>, pas seulement par les spécialistes.
+        </p>
+        <div class="actions">
+          <a class="btn btn-principal btn-grand" href="../app/index.html">Créer mon arbre</a>
+          <a class="btn btn-grand" href="#comment">Voir comment ça marche</a>
+        </div>
+        <p class="preuve">Prototype de démonstration · données conservées dans ce navigateur · export GEDCOM et sauvegarde locale</p>
+      </div>
+
+      <!-- Petite maquette de l'arbre, dessinée à la main en CSS. -->
+      <div class="maquette" aria-hidden="true">
+        <div class="scene">
+          <div class="carte" style="left:0;top:0">
+            <b>Alba Brumeclair</b><span>° 1954 · lieu fictif</span>
+            <div class="badge">+</div>
+          </div>
+          <div class="carte" style="left:186px;top:0">
+            <b>Nils Brumeclair</b><span>° 1937</span>
+          </div>
+          <div class="carte" style="left:93px;top:118px">
+            <b>Mila Brumeclair</b><span>° 1977 · Boisdesonge</span>
+            <div class="badge">+</div>
+          </div>
+          <div class="carte" style="left:279px;top:118px">
+            <b>Théo Ruisseclair</b><span>° 1975 · Val-des-Lucioles</span>
+          </div>
+          <div class="carte" style="left:186px;top:236px;border-width:2px;border-color:var(--vert)">
+            <b>Lior Brumeclair</b><span>° 2005 · Val-des-Lucioles</span>
+          </div>
+          <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" aria-hidden="true">
+            <!-- les grands-parents : barre de couple, puis descente vers Thibaut -->
+            <path d="M168,33 H186" stroke="var(--carte-bord)" stroke-width="1.6" fill="none"/>
+            <path d="M177,33 V118" stroke="var(--carte-bord)" stroke-width="1.6" fill="none"/>
+            <!-- les parents : barre de couple, puis descente vers Lior -->
+            <path d="M261,151 H279" stroke="var(--vert)" stroke-width="1.6" fill="none"/>
+            <path d="M270,151 V236" stroke="var(--vert)" stroke-width="1.8" fill="none"/>
+          </svg>
+        </div>
+        <div class="legende">Avec les boutons <b>+</b>, on ajoute les parents, les enfants, les conjoints.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== Pourquoi ===================== -->
+  <section>
+    <div class="bande">
+      <h2>Pourquoi les familles s'y mettent</h2>
+      <p class="intro">Vos photos sont dans un carton, vos dates dans un carnet, et ceux qui savaient sont partis. Un arbre familial local aide à réunir dates, lieux, liens et souvenirs dans un même espace.</p>
+      <div class="grille-3">
+        <div class="carte atout">
+          <div class="icone">👓</div>
+          <h3>Lisible par tous</h3>
+          <p>Gros caractères, contrastes vérifiés, <strong>8 ambiances de couleurs</strong> — de la crème au mode nuit. Une personne de 80 ans peut lire sans plisser les yeux.</p>
+        </div>
+        <div class="carte atout">
+          <div class="icone">➕</div>
+          <h3>Trois secondes par personne</h3>
+          <p>Un bouton <strong>+</strong>, un prénom, une année. L'arbre se dessine tout seul. Pas de formulaire savant, pas de jargon.</p>
+        </div>
+        <div class="carte atout">
+          <div class="icone">🔒</div>
+          <h3>Rien que pour vous</h3>
+          <p>Aucun compte ni partage familial n'est configuré dans ce prototype. Les données saisies restent dans le navigateur de cet appareil.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Étapes ===================== -->
+  <section id="comment">
+    <div class="bande">
+      <h2>Comment ça marche</h2>
+      <p class="intro">Le prototype fonctionne dans un navigateur. Les données restent sur l'appareil jusqu'à leur export.</p>
+      <div class="etapes">
+        <div class="carte etape">
+          <h3>Commencez par vous</h3>
+          <p>Ouvrez la démonstration fictive ou importez un GEDCOM que vous avez le droit d'utiliser.</p>
+        </div>
+        <div class="carte etape">
+          <h3>Complétez les fiches</h3>
+          <p>Ajoutez ou corrigez les informations dans l'arbre local, puis vérifiez les relations.</p>
+        </div>
+        <div class="carte etape">
+          <h3>Gardez une copie</h3>
+          <p>Exportez un GEDCOM ou une sauvegarde complète .berceau et conservez le fichier en lieu sûr.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Prix ===================== -->
+  <section id="prix">
+    <div class="bande">
+      <h2>État de la version</h2>
+      <p class="intro">Cette copie est un prototype local. Les tarifs, comptes familiaux, partage en ligne et hébergement ne sont pas disponibles.</p>
+<div class="prix"><div class="carte offre mise"><span class="etiquette">Prototype local</span><p>Import GEDCOM, consultation et corrections locales sont en cours de validation. Les offres payantes et le partage entre appareils ne sont pas encore proposés.</p><a class="btn btn-principal" href="../app/index.html">Ouvrir la démonstration</a></div></div>
+    </div>
+  </section>
+
+  <!-- ===================== Questions ===================== -->
+  <section id="questions">
+    <div class="bande">
+      <h2>Les questions qu'on nous pose</h2>
+      <div class="carte" style="padding:6px 20px">
+        <details class="question"><summary>Faut-il savoir se servir d'un ordinateur ?</summary>
+          <p>Non. Si vous savez lire et cliquer sur un bouton, c'est suffisant. Le site est écrit en gros, avec un seul bouton important par écran, et chaque action est annoncée en clair.</p>
+        </details>
+        <details class="question"><summary>Mes données sont-elles visibles par tout le monde ?</summary>
+          <p>Les modifications sont conservées dans le navigateur de votre appareil. Elles ne sont pas synchronisées; exportez une sauvegarde pour les transférer.</p>
+        </details>
+        <details class="question"><summary>Et si je veux arrêter ?</summary>
+          <p>Exportez vos données généalogiques en GEDCOM, que les autres logiciels de généalogie peuvent lire. Utilisez la sauvegarde .berceau pour inclure les photos.</p>
+        </details>
+        <details class="question"><summary>Où sont mes photos ?</summary>
+          <p>Les photos optimisées sont conservées dans le navigateur. Une sauvegarde complète .berceau les inclut; le GEDCOM ne contient que les chemins de fichiers.</p>
+        </details>
+        <details class="question"><summary>Ça marche sur téléphone ?</summary>
+          <p>Une interface mobile existe, mais elle reste à vérifier sur téléphone réel avant de confier des données familiales.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="bande">
+    <div>© 2026 Berceau — Prototype de démonstration</div>
+    <div><a href="#prix">Version</a> · <a href="#questions">Questions</a> · <a href="../app/index.html">Créer mon arbre</a></div>
+  </div>
+</footer>
+
+<script>
+/* Les 8 ambiances, pour montrer en vrai (et pas seulement en photo) que le site
+   s'adapte aux yeux de chacun. On garde le choix d'une visite à l'autre. */
+(function () {
+  var THEMES = [
+    ['papier', 'Papier', '#f6f5f0'], ['ivoire', 'Ivoire', '#faf7f0'],
+    ['sepia', 'Sépia', '#f2e9d6'],   ['sauge', 'Sauge', '#edf2ea'],
+    ['nuit', 'Nuit', '#1b1d1a'],     ['graphite', 'Graphite', '#1c1c1c'],
+    ['ardoise', 'Ardoise', '#171b22'], ['contraste', 'Contraste', '#ffffff']
+  ];
+  var zone = document.getElementById('themes');
+  if (!zone) return;
+
+  function appliquer(nom) {
+    if (nom === 'papier') document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme', nom);
+    try { localStorage.setItem('berceau-theme', nom); } catch (e) {}
+    zone.querySelectorAll('button').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.dataset.theme === nom ? 'true' : 'false');
+    });
+  }
+
+  var actuel = 'papier';
+  try { actuel = localStorage.getItem('berceau-theme') || 'papier'; } catch (e) {}
+
+  THEMES.forEach(function (t) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.dataset.theme = t[0];
+    b.title = t[1];
+    b.setAttribute('aria-label', 'Ambiance ' + t[1]);
+    b.style.background = t[2];
+    b.onclick = function () { appliquer(t[0]); };
+    zone.appendChild(b);
+  });
+  appliquer(actuel);
+})();
+</script>
+</body>
+</html>
