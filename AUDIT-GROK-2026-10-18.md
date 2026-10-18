@@ -20,6 +20,7 @@ Le rapport recommande de ne pas créer de comptes, de synchronisation familiale 
 ## Suivi dans la copie commerciale
 
 - Fait localement : jeu intégré et fichiers de démonstration remplacés par des données entièrement fictives.
+- Fait localement : page de présentation mise à jour avec des personnages fictifs et sans promesses de tarifs, partage ou hébergement en ligne non disponibles.
 - Fait localement : ajout et correction sans code pour les arbres marqués modifiables localement.
 - Fait localement : dates GEDCOM exactes impossibles rejetées pendant la conversion.
 - Fait localement : choisir un résultat de recherche recentre la vue de l’arbre autour de la personne.
