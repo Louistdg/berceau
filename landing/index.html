@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Berceau — l'histoire de votre famille, enfin lisible</title>
-<meta name="description" content="Un site privé pour votre famille : l'arbre généalogique, les dates, les lieux, les histoires. Pensé pour être lu par les grands-parents.">
+<meta name="description" content="Prototype local de généalogie : créez un arbre, consultez ses fiches et exportez vos données.">
 <!-- Le thème est posé avant l'affichage, sinon on voit un flash. -->
 <script>
 try {
@@ -91,6 +91,7 @@ try {
 
   /* --- Prix ------------------------------------------------------------- */
   .prix { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; }
+  .prix.etat-prototype { grid-template-columns: minmax(0, 640px); justify-content: center; }
   .offre { padding: 22px; display: flex; flex-direction: column; gap: 10px; }
   .offre.mise { border-color: var(--vert); border-width: 2px; }
   .offre .etiquette {
@@ -136,7 +137,7 @@ try {
       <a href="#prix">Version</a>
       <a href="#questions">Questions</a>
       <div class="themes" id="themes" role="group" aria-label="Ambiance de couleurs"></div>
-      <a class="btn btn-principal" href="../app/index.html">Créer mon arbre</a>
+      <a class="btn btn-principal" href="../app/index.html">Ouvrir la démonstration</a>
     </nav>
   </div>
 </header>
@@ -152,7 +153,7 @@ try {
           Conçu pour être lu <strong>par les grands-parents</strong>, pas seulement par les spécialistes.
         </p>
         <div class="actions">
-          <a class="btn btn-principal btn-grand" href="../app/index.html">Créer mon arbre</a>
+          <a class="btn btn-principal btn-grand" href="../app/index.html">Ouvrir la démonstration</a>
           <a class="btn btn-grand" href="#comment">Voir comment ça marche</a>
         </div>
         <p class="preuve">Prototype de démonstration · données conservées dans ce navigateur · export GEDCOM et sauvegarde locale</p>
@@ -244,7 +245,7 @@ try {
     <div class="bande">
       <h2>État de la version</h2>
       <p class="intro">Cette copie est un prototype local. Les tarifs, comptes familiaux, partage en ligne et hébergement ne sont pas disponibles.</p>
-<div class="prix"><div class="carte offre mise"><span class="etiquette">Prototype local</span><p>Import GEDCOM, consultation et corrections locales sont en cours de validation. Les offres payantes et le partage entre appareils ne sont pas encore proposés.</p><a class="btn btn-principal" href="../app/index.html">Ouvrir la démonstration</a></div></div>
+<div class="prix etat-prototype"><div class="carte offre mise"><span class="etiquette">Prototype local</span><p>Import GEDCOM, consultation et corrections locales sont en cours de validation. Les offres payantes et le partage entre appareils ne sont pas encore proposés.</p><a class="btn btn-principal" href="../app/index.html">Ouvrir la démonstration</a></div></div>
     </div>
   </section>
 
@@ -276,7 +277,7 @@ try {
 <footer>
   <div class="bande">
     <div>© 2026 Berceau — Prototype de démonstration</div>
-    <div><a href="#prix">Version</a> · <a href="#questions">Questions</a> · <a href="../app/index.html">Créer mon arbre</a></div>
+    <div><a href="#prix">Version</a> · <a href="#questions">Questions</a> · <a href="../app/index.html">Ouvrir la démonstration</a></div>
   </div>
 </footer>
 
