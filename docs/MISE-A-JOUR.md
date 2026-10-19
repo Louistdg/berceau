@@ -213,3 +213,28 @@ Vérifications en ligne :
 - Description et site web du dépôt renseignés (`https://berceau.socle-construction.be`).
 - Commit `78097dd` sur `main`.
 - **Bouton de thème sur téléphone** : 76 px → **103 × 44 px**, bordure claire, nom en gras, chevron. En ligne.
+
+## 16. Direction visuelle « Archive » — 19/10/2026 20 h 55
+
+- Direction retenue parmi cinq propositions : **Archive** (nuit chaude, or, serif).
+- Nouveau thème `archive` : fond `#17130f`, cartes `#241d15`, bordures `#4a3b26`, or `#c9a227`, texte `#f0e7d8`, noms en **Georgia**.
+- Il devient le **thème d'ouverture** (clé `arbre-theme-7`) ; les 10 autres thèmes restent disponibles (**11 au total**).
+- Liens et pastilles de l'arbre passés en or pour ce thème ; boutons principaux or à texte sombre.
+
+Vérifications en ligne :
+
+| Contrôle | 1440 px | 390 px |
+|---|---|---|
+| Thème | `archive` | `archive` |
+| Fond | `rgb(23,19,15)` | `rgb(23,19,15)` |
+| Police des noms | Georgia (serif) | Georgia (serif) |
+| Cartes | 8 / 8 | 3 / 3 |
+| Débordement | aucun | aucun |
+| Erreurs console | aucune | aucune |
+
+- Captures : `captures/live-archive-1440.png`, `captures/live-archive-390.png`, `captures/archive-1440.png`, `captures/archive-390.png`.
+
+## 17. Maquettes de direction — 19/10/2026
+
+- Cinq directions dessinées : Herbier, Minuit, Sauge claire, Atelier, Archive (`captures/CINQ-DIRECTIONS.png`).
+- Fichiers sources des maquettes : `out/maquettes/*.html` (hors dépôt).
