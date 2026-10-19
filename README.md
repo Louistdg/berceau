@@ -1,38 +1,50 @@
-# Arbre généalogique commercialisation — Berceau
+﻿# Berceau — arbre familial
 
-Berceau est un prototype de généalogie destiné aux familles francophones. Ce dépôt rassemble exclusivement la copie commerciale du projet; l’application personnelle et ses données ne sont pas incluses.
+Arbre généalogique en ligne, en français, pensé pour des familles : lecture simple, gros textes, navigation au doigt.
 
-## Démarrer
+**Démonstration en ligne :** https://berceau.socle-construction.be
 
-- Application : ouvrir app/index.html dans un navigateur récent.
-- Page de présentation : landing/index.html.
-- Démonstration GEDCOM fictive : data/demo.ged (7 personnes, 2 familles).
-- Schéma des données : data/schema.md.
-- Convertisseur GEDCOM : outils/ged2arbre.mjs.
+> Les 469 personnes de la démonstration sont **fictives**. Aucune donnée familiale réelle n'est présente dans ce dépôt.
 
-Les arbres, corrections et ajouts restent dans le navigateur de l’appareil. Un GEDCOM transporte les données généalogiques et les chemins de photo; la sauvegarde complète .berceau transporte aussi les images. Les deux formats sont différents.
+## Ce que fait l'application
 
-## État de la copie commerciale
+- arbre généalogique interactif (ancêtres, descendance, vue familiale, vue éventail) ;
+- fiches de personnes : dates, lieux, photos, notes, sources ;
+- recherche, annuaire, calendrier familial ;
+- pages de lecture : **Les noms**, **Chronologie**, **Les lieux** ;
+- **10 thèmes** de couleurs, dont un thème sombre par défaut ;
+- import **GEDCOM** (`.ged`) et export SVG ;
+- sauvegarde `.berceau` (arbre + photos) ;
+- impression.
 
-- Arbre interactif, fiches, recherche, consultation, thèmes et gestion locale de plusieurs arbres.
-- Import et export GEDCOM dans l'application principale, avec les événements, notes, sources, mariages et chemins de médias pris en charge.
-- Ajout et correction locale sans code serveur pour les arbres locaux.
-- Photos optimisées, stockées dans IndexedDB.
-- Sauvegarde et restauration .berceau.
-- Jeu intégré et fichiers de démonstration remplacés par des données fictives.
-- Corrections locales tirées de l’audit Grok : dates exactes impossibles rejetées, recherche qui ouvre l’arbre autour du résultat, impression qui prépare tous les profils, menu mobile réduit et sauvegarde accessible depuis l’action principale.
-- Voix et partage de changements entre appareils ne sont pas annoncés comme disponibles. Les données locales ne sont pas synchronisées vers un serveur.
-- Les corrections locales n’ont pas été déployées; elles doivent encore être retestées dans un navigateur avant toute présentation ou vente.
+## Technique
 
-## Données à garder hors du dépôt
+Une seule page HTML autonome, sans framework, sans dépendance, sans build :
 
-sauvegardes/, _ancien-prototype/, app/index.origine.html, les checkpoints et les exports réels sont exclus. Les versions historiques peuvent contenir des données familiales. Le jeu public de démonstration doit rester fictif.
+```
+app/index.html   ~776 Ko   l'application entière
+app/favicon.svg
+data/demo.ged    fichier GEDCOM fictif (7 personnes) pour tester l'import
+data/liens-archives.json   annuaire de portails d'archives (page « Chercher un acte »)
+design/          règles visuelles et jetons de couleurs
+outils/          convertisseur GEDCOM et blocs d'interface
+docs/            fiche projet et historique des mises à jour
+```
 
-## Documents
+## Lancer en local
 
-- VERIFICATION-AVANT-COMMERCIALISATION.md : état des vérifications et éléments encore à démontrer.
-- AUDIT-GROK-2026-10-18.md : constats reçus et suivi des corrections.
-- missions/A-FAIRE/ : mission B1-08 encore en attente.
-- design/tokens.css : variables visuelles du prototype.
+```bash
+cd app
+python -m http.server 8000
+# http://localhost:8000/
+```
 
-Ne déploie pas depuis ce dépôt sans décision explicite.
+Ne pas ouvrir `index.html` en `file://` : la page interroge `../data/berceau-archives.json` et `/api/contributions`.
+
+## Données et vie privée
+
+Tout est stocké dans le navigateur (`localStorage`, `IndexedDB` pour les photos). Aucun compte, aucun serveur, aucune requête tierce.
+
+## Licence
+
+Projet privé — tous droits réservés. Contact : Louis Masson.

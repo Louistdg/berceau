@@ -1,0 +1,316 @@
+<!-- PAGES-FAMILLE:DEBUT -->
+<style id="pages-famille">
+/* Pages de lecture : les noms, la chronologie, les lieux.
+   Elles se calculent a partir de l'arbre charge, sans reseau. */
+.pg{position:fixed;inset:0;z-index:85;display:none;overflow:auto;-webkit-overflow-scrolling:touch;
+    background:var(--paper,#1b2029);color:var(--ink,#eaf0f8)}
+.pg.on{display:block}
+.pg-head{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    padding:10px 14px;background:var(--paper,#1b2029);border-bottom:1px solid var(--line,#38404e)}
+.pg-back{min-height:44px;padding:0 15px;border-radius:10px;border:1px solid var(--line,#38404e);
+    background:transparent;color:inherit;font-size:14px}
+.pg-back:hover{border-color:var(--green,#96b9de)}
+.pg-tabs{display:flex;gap:6px;overflow-x:auto;margin-left:auto;scrollbar-width:none}
+.pg-tabs::-webkit-scrollbar{display:none}
+.pg-tabs button{min-height:44px;padding:0 15px;border-radius:10px;border:1px solid transparent;
+    background:transparent;color:var(--muted,#a6b0bf);font-size:14px;white-space:nowrap}
+.pg-tabs button.on{border-color:var(--line,#38404e);background:var(--white,#232935);color:var(--ink,#eaf0f8);font-weight:600}
+.pg-body{max-width:900px;margin:0 auto;padding:30px 18px 90px}
+.pg-body h1{font:600 30px/1.15 Georgia,serif;margin:0 0 8px}
+.pg-lead{margin:0 0 24px;color:var(--muted,#a6b0bf);font-size:15px;max-width:36em}
+.pg-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:0 0 30px}
+.pg-stat{border:1px solid var(--line,#38404e);border-radius:12px;padding:13px 15px;background:var(--white,#232935)}
+.pg-stat b{display:block;font:600 22px/1.2 Georgia,serif;margin-bottom:3px;overflow-wrap:anywhere}
+.pg-stat span{color:var(--muted,#a6b0bf);font-size:13.5px}
+.pg-row{border-top:1px solid var(--line,#38404e);padding:17px 0}
+.pg-row:first-of-type{border-top:0;padding-top:0}
+.pg-row-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.pg-row h2{font:600 21px/1.2 Georgia,serif;margin:0}
+.pg-count{margin-left:auto;color:var(--muted,#a6b0bf);font-size:13.5px;font-variant-numeric:tabular-nums}
+.pg-bar{height:4px;border-radius:2px;background:var(--line,#38404e);margin:10px 0 9px;overflow:hidden}
+.pg-bar i{display:block;height:100%;border-radius:2px;background:var(--green,#96b9de);min-width:3px}
+.pg-meta{margin:0;color:var(--muted,#a6b0bf);font-size:13.5px}
+.pg-vars{margin:8px 0 0}
+.pg-vars span{display:inline-block;margin:0 6px 6px 0;padding:2px 9px;border:1px solid var(--line,#38404e);
+    border-radius:999px;font-size:13px;color:var(--muted,#a6b0bf)}
+.pg-empty{padding:34px 0;color:var(--muted,#a6b0bf);font-size:15px;max-width:34em;line-height:1.6}
+.pg-foot{margin-top:34px;padding-top:14px;border-top:1px solid var(--line,#38404e);color:var(--muted,#a6b0bf);font-size:13px}
+@media(max-width:600px){
+  .pg-head{padding:8px 10px;gap:8px}
+  .pg-tabs{margin-left:0;width:100%;order:3}
+  .pg-tabs button{flex:1 0 auto;padding:0 12px}
+  .pg-body{padding:22px 14px 80px}
+  .pg-body h1{font-size:24px}
+  .pg-row h2{font-size:19px}
+  .pg-count{margin-left:0}
+}
+</style>
+<section class="pg" id="pages" aria-label="Pages de la famille">
+  <header class="pg-head">
+    <button class="pg-back" id="pg-back" type="button">← L'arbre</button>
+    <nav class="pg-tabs" aria-label="Pages">
+      <button type="button" data-page="noms">Les noms</button>
+      <button type="button" data-page="chronologie">Chronologie</button>
+      <button type="button" data-page="lieux">Les lieux</button>
+    </nav>
+  </header>
+  <div class="pg-body" id="pg-body"></div>
+</section>
+<script id="pages-famille-script">(function(){
+  'use strict';
+  var D = window.FAMILY_DATA;
+  var page = 'noms';
+
+  function el(tag, cls, txt){ var e=document.createElement(tag); if(cls)e.className=cls; if(txt!=null)e.textContent=txt; return e; }
+  function strip(s){ return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z]/g,''); }
+  function annee(d){ if(!d) return null; var m=/(\d{4})/.exec(String(d)); if(!m) return null; var y=+m[1]; return (y>1400&&y<2100)?y:null; }
+  function naissance(p){ return annee(p.birth&&p.birth.date); }
+  function deces(p){ return annee(p.death&&p.death.date); }
+  function lieu(p){ return ((p.birth&&p.birth.place)||(p.death&&p.death.place)||'').trim(); }
+  function commune(l){ return String(l).split(',')[0].trim(); }
+  function nf(n){ return n.toLocaleString('fr-BE'); }
+  function span(min,max){ if(min==null&&max==null) return ''; if(min==null) return 'jusqu’en '+max; if(max==null) return 'depuis '+min; if(min===max) return 'en '+min; return 'de '+min+' à '+max; }
+
+  function personnes(){
+    if(!D || !D.people) return [];
+    return D.people.filter(function(p){ return p && p.name; });
+  }
+
+  function groupesNoms(){
+    var m = new Map();
+    personnes().forEach(function(p){
+      var brut = (p.surname||'').trim();
+      if(!brut) return;
+      var cle = strip(brut);
+      if(!cle) return;
+      var g = m.get(cle);
+      if(!g){ g={ cle:cle, variantes:new Map(), n:0, min:null, max:null, lieux:new Map() }; m.set(cle,g); }
+      g.n++;
+      g.variantes.set(brut,(g.variantes.get(brut)||0)+1);
+      var a=naissance(p);
+      if(a!=null){ if(g.min==null||a<g.min)g.min=a; if(g.max==null||a>g.max)g.max=a; }
+      var l=lieu(p); if(l){ var c=commune(l); var k=strip(c); if(k){ var cur=g.lieux.get(k); if(cur)cur.n++; else g.lieux.set(k,{nom:c,n:1}); } }
+    });
+    return [...m.values()].sort(function(a,b){ return b.n-a.n || a.cle.localeCompare(b.cle); });
+  }
+
+  function groupesLieux(){
+    var m = new Map();
+    personnes().forEach(function(p){
+      var l = lieu(p); if(!l) return;
+      var c = commune(l); if(!c) return;
+      var cle = strip(c); if(!cle) return;
+      var g = m.get(cle);
+      if(!g){ g={ cle:cle, graphies:new Map(), n:0, min:null, max:null }; m.set(cle,g); }
+      g.n++;
+      g.graphies.set(c,(g.graphies.get(c)||0)+1);
+      var a=naissance(p)||deces(p);
+      if(a!=null){ if(g.min==null||a<g.min)g.min=a; if(g.max==null||a>g.max)g.max=a; }
+    });
+    return [...m.values()].sort(function(a,b){ return b.n-a.n || a.cle.localeCompare(b.cle); });
+  }
+
+  function parDixaine(liste){
+    var m=new Map(), min=null, max=null;
+    liste.forEach(function(p){
+      var a=naissance(p); if(a==null) return;
+      if(min==null||a<min)min=a; if(max==null||a>max)max=a;
+      var d=Math.floor(a/10)*10;
+      m.set(d,(m.get(d)||0)+1);
+    });
+    return { tranches:[...m.entries()].sort(function(a,b){return a[0]-b[0];}), min:min, max:max };
+  }
+
+  function plusFrequent(map){
+    var best=null, n=-1;
+    map.forEach(function(v,k){ if(v>n){ n=v; best=k; } });
+    return best;
+  }
+
+  function entete(titre, chapeau){
+    var f=document.createDocumentFragment();
+    f.appendChild(el('h1',null,titre));
+    if(chapeau) f.appendChild(el('p','pg-lead',chapeau));
+    return f;
+  }
+
+  function stats(items){
+    var g=el('div','pg-stats');
+    items.forEach(function(it){
+      var b=el('div','pg-stat');
+      b.appendChild(el('b',null,it[0]));
+      b.appendChild(el('span',null,it[1]));
+      g.appendChild(b);
+    });
+    return g;
+  }
+
+  function ligne(nom, compte, total, meta, variantes){
+    var r=el('article','pg-row');
+    var h=el('div','pg-row-head');
+    h.appendChild(el('h2',null,nom));
+    h.appendChild(el('span','pg-count',nf(compte)+' personne'+(compte>1?'s':'')));
+    r.appendChild(h);
+    var bar=el('div','pg-bar'); var i=el('i'); i.style.width=Math.max(2,Math.round(100*compte/total))+'%'; bar.appendChild(i); r.appendChild(bar);
+    r.appendChild(el('p','pg-meta',meta));
+    if(variantes && variantes.length>1){
+      var v=el('p','pg-vars');
+      variantes.forEach(function(x){ v.appendChild(el('span',null,x)); });
+      r.appendChild(v);
+    }
+    return r;
+  }
+
+  function vide(txt){
+    var d=el('div','pg-empty'); d.textContent=txt; return d;
+  }
+
+  function pied(){
+    return el('p','pg-foot','Page calculée à partir de votre arbre. Aucune donnée ne quitte votre appareil.');
+  }
+
+  function rendreNoms(){
+    var body=document.getElementById('pg-body');
+    var groupes=groupesNoms();
+    var gens=personnes();
+    body.replaceChildren();
+    if(!groupes.length){
+      body.appendChild(entete('Les noms de la famille'));
+      body.appendChild(vide('Les noms sont masqués dans cette copie de démonstration. Cette page les affiche dès que l’arbre contient de vrais noms de famille.'));
+      return;
+    }
+    var total=groupes.reduce(function(s,g){return s+g.n;},0);
+    var max=groupes[0].n;
+    var plusAncien=groupes.filter(function(g){return g.min!=null;}).sort(function(a,b){return a.min-b.min;})[0];
+    var uniques=groupes.filter(function(g){return g.variantes.size===1;}).length;
+    body.appendChild(entete('Les noms de la famille',
+      nf(groupes.length)+' noms différents, '+nf(total)+' personnes. Les graphies proches sont regroupées ; les variantes restent affichées.'));
+    var graphies=groupes.reduce(function(s,g){return s+g.variantes.size;},0);
+    var nomCourant=groupes[0].cle.charAt(0).toUpperCase()+groupes[0].cle.slice(1);
+    var nomAncien=plusAncien ? plusAncien.cle.charAt(0).toUpperCase()+plusAncien.cle.slice(1) : null;
+    body.appendChild(stats([
+      [nf(groupes[0].n), 'personnes portant le nom le plus courant — '+nomCourant],
+      [plusAncien ? String(plusAncien.min) : '—', plusAncien ? 'la plus ancienne naissance — '+nomAncien : 'aucune date'],
+      [nf(graphies)+' / '+nf(groupes.length), 'graphies recensées pour ces noms']
+    ]));
+    groupes.forEach(function(g){
+      var variantes=[...g.variantes.entries()].sort(function(a,b){return b[1]-a[1];}).map(function(x){ return x[1]>1 ? x[0]+' ('+x[1]+')' : x[0]; });
+      var nom=g.cle.charAt(0).toUpperCase()+g.cle.slice(1);
+      var lieuxTop=[...g.lieux.values()].sort(function(a,b){return b.n-a.n;}).slice(0,3).map(function(x){return x.nom;});
+      var meta=span(g.min,g.max)+(g.lieux.size?(' · '+lieuxTop.join(' · ')):'');
+      body.appendChild(ligne(nom, g.n, max, meta, variantes));
+    });
+    body.appendChild(pied());
+  }
+
+  function rendreChronologie(){
+    var body=document.getElementById('pg-body');
+    var gens=personnes();
+    var d=parDixaine(gens);
+    body.replaceChildren();
+    body.appendChild(entete('La chronologie',
+      gens.length ? ('Naissances et décès, décennie par décennie, d’après les dates portées dans l’arbre.') : 'Aucune personne.'));
+    if(!d.tranches.length){
+      body.appendChild(vide('Aucune date de naissance renseignée dans cet arbre.'));
+      return;
+    }
+    var max=Math.max.apply(null,d.tranches.map(function(t){return t[1];}));
+    var decedes=gens.map(deces).filter(function(x){return x!=null;});
+    var lieux=groupesLieux();
+    var decesParDixaine=new Map();
+    decedes.forEach(function(a){ var d=Math.floor(a/10)*10; decesParDixaine.set(d,(decesParDixaine.get(d)||0)+1); });
+    body.appendChild(stats([
+      [nf(gens.filter(function(p){return naissance(p)!=null;}).length), 'personnes avec une année de naissance'],
+      [nf(decedes.length), 'personnes avec une année de décès'],
+      [d.min+' – '+d.max, 'période couverte'],
+      [lieux.length?lieux[0].graphies.keys().next().value:'—', 'lieu le plus cité']
+    ]));
+    d.tranches.forEach(function(t){
+      var r=el('article','pg-row');
+      var h=el('div','pg-row-head');
+      h.appendChild(el('h2',null,t[0]+'–'+(t[0]+9)));
+      var morts=decesParDixaine.get(t[0])||0;
+      h.appendChild(el('span','pg-count',nf(t[1])+' naissance'+(t[1]>1?'s':'')+(morts?(' · '+nf(morts)+' décès'):'')));
+      r.appendChild(h);
+      var bar=el('div','pg-bar'); var i=el('i'); i.style.width=Math.max(2,Math.round(100*t[1]/max))+'%'; bar.appendChild(i); r.appendChild(bar);
+      var dansLaTranche=gens.filter(function(p){var a=naissance(p);return a!=null&&a>=t[0]&&a<=t[0]+9;});
+      var noms=[...new Set(dansLaTranche.map(function(p){return (p.surname||'').trim();}).filter(Boolean))].slice(0,3);
+      if(noms.length) r.appendChild(el('p','pg-meta','Noms cités : '+noms.join(' · ')));
+      body.appendChild(r);
+    });
+    body.appendChild(pied());
+  }
+
+  function rendreLieux(){
+    var body=document.getElementById('pg-body');
+    var groupes=groupesLieux();
+    var gens=personnes();
+    body.replaceChildren();
+    body.appendChild(entete('Les lieux','Les communes citées dans l’arbre, regroupées malgré les différences d’écriture (accents, majuscules, compléments d’adresse).'));
+    if(!groupes.length){
+      body.appendChild(vide('Aucun lieu renseigné dans cet arbre. Les communes apparaîtront ici dès qu’elles seront présentes dans les fiches.'));
+      return;
+    }
+    var max=groupes[0].n;
+    body.appendChild(stats([
+      [nf(groupes.length), 'communes'],
+      [nf(groupes.reduce(function(s,g){return s+g.n;},0)), 'personnes situées'],
+      [nf(groupes.filter(function(g){return g.graphies.size>1;}).length), 'communes à plusieurs graphies']
+    ]));
+    groupes.forEach(function(g){
+      var graphies=[...g.graphies.entries()].sort(function(a,b){return b[1]-a[1];}).map(function(x){ return x[1]>1 ? x[0]+' ('+x[1]+')' : x[0]; });
+      var principale=graphies[0];
+      var nom=principale.replace(/ \(\d+\)$/,'');
+      body.appendChild(ligne(nom, g.n, max, span(g.min,g.max), graphies));
+    });
+    body.appendChild(pied());
+  }
+
+  function rendre(p){
+    page=p;
+    document.querySelectorAll('.pg-tabs button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-page')===p); });
+    if(p==='chronologie') rendreChronologie();
+    else if(p==='lieux') rendreLieux();
+    else rendreNoms();
+    var s=document.getElementById('pages'); if(s) s.scrollTop=0;
+  }
+
+  function ouvrir(p){
+    var s=document.getElementById('pages'); if(!s) return;
+    s.classList.add('on');
+    rendre(p||page);
+    try{ document.querySelector('aside')?.classList.remove('ouvert'); }catch(e){}
+    var b=document.getElementById('pg-back'); if(b) b.focus({preventScroll:true});
+  }
+  function fermer(){
+    var s=document.getElementById('pages'); if(s) s.classList.remove('on');
+    try{ document.getElementById('menu')?.focus({preventScroll:true}); }catch(e){}
+  }
+
+  function monterNav(){
+    var aside=document.querySelector('aside');
+    if(!aside || aside.querySelector('[data-pg-nav]')) return;
+    var label=el('p','section-label','Découvrir');
+    var nav=el('div','nav'); nav.setAttribute('data-pg-nav','');
+    [['noms','Les noms'],['chronologie','Chronologie'],['lieux','Les lieux']].forEach(function(x){
+      var b=el('button',null,x[1]); b.type='button'; b.setAttribute('data-ouvre',x[0]);
+      nav.appendChild(b);
+    });
+    aside.appendChild(label); aside.appendChild(nav);
+  }
+
+  document.addEventListener('click',function(e){
+    var t=e.target.closest ? e.target.closest('[data-ouvre],[data-page],#pg-back') : null;
+    if(!t) return;
+    if(t.id==='pg-back'){ e.preventDefault(); fermer(); return; }
+    if(t.hasAttribute('data-page')){ e.preventDefault(); rendre(t.getAttribute('data-page')); return; }
+    if(t.hasAttribute('data-ouvre')){ e.preventDefault(); ouvrir(t.getAttribute('data-ouvre')); }
+  });
+  document.addEventListener('keydown',function(e){
+    var s=document.getElementById('pages');
+    if(e.key==='Escape' && s && s.classList.contains('on')){ e.preventDefault(); fermer(); }
+  });
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',monterNav); else monterNav();
+  setTimeout(monterNav,800); setTimeout(monterNav,2500);
+})();</script>
+<!-- PAGES-FAMILLE:FIN -->

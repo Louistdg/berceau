@@ -1,0 +1,1553 @@
+{
+  "version": 1,
+  "misAJour": "2026-10",
+  "regle": "Nom + commune/paroisse + date approximative. Sans ces trois informations, la recherche est presque impossible.",
+  "portailsInternationaux": [
+    {
+      "nom": "FamilySearch",
+      "url": "https://www.familysearch.org/",
+      "acces": "gratuit (compte)",
+      "note": "Des milliards d'actes, indexés, dans le monde entier. Le wiki FamilySearch propose un guide par pays."
+    },
+    {
+      "nom": "FamilySearch Wiki",
+      "url": "https://www.familysearch.org/en/wiki/Main_Page",
+      "acces": "gratuit",
+      "note": "Guide méthodique pays par pays, avec la liste des archives et des bases en ligne."
+    },
+    {
+      "nom": "Matricula Online",
+      "url": "https://www.matricula-online.eu/",
+      "acces": "gratuit",
+      "note": "Registres catholiques numérisés : Allemagne, Autriche, Luxembourg, Pologne, Slovénie, Serbie, nord de l'Italie, Bosnie, Hongrie."
+    },
+    {
+      "nom": "Archives Portal Europe",
+      "url": "https://www.archivesportaleurope.net/",
+      "acces": "gratuit",
+      "note": "Point d'entrée vers les archives nationales européennes."
+    },
+    {
+      "nom": "Geneanet",
+      "url": "https://www.geneanet.org/",
+      "acces": "gratuit",
+      "note": "Arbres collaboratifs, index et liens vers les archives. Très utilisé en France et en Europe francophone."
+    },
+    {
+      "nom": "Filae",
+      "url": "https://www.filae.com/",
+      "acces": "payant",
+      "note": "Spécialisé dans l'état civil et les archives françaises."
+    },
+    {
+      "nom": "Ancestry",
+      "url": "https://www.ancestry.com/",
+      "acces": "payant",
+      "note": "Très riche pour l'Allemagne, le Royaume-Uni, l'Europe centrale."
+    },
+    {
+      "nom": "MyHeritage",
+      "url": "https://www.myheritage.com/",
+      "acces": "payant",
+      "note": "Collections variées, fort en Europe de l'Est."
+    },
+    {
+      "nom": "findmypast",
+      "url": "https://www.findmypast.com/",
+      "acces": "payant",
+      "note": "Spécialiste du Royaume-Uni et de l'Irlande."
+    },
+    {
+      "nom": "JewishGen",
+      "url": "https://www.jewishgen.org/",
+      "acces": "gratuit",
+      "note": "Racines juives : index par ville d'Europe centrale et orientale."
+    }
+  ],
+  "pays": [
+    {
+      "code": "DE",
+      "nom": "Allemagne",
+      "priorite": 1,
+      "motsCles": [
+        "allemagne",
+        "germany",
+        "deutschland",
+        "allemand",
+        "bundesrepublik deutschland",
+        "deutscher",
+        "deutsche"
+      ],
+      "etatCivilDepuis": 1876,
+      "avantEtatCivil": "Registres paroissiaux (Kirchenbücher) des églises protestantes et catholiques",
+      "hierarchie": "Pays → Land → Kreis/arrondissement ou ville → commune/paroisse → Standesamt ou archive",
+      "delais": "Naissances 110 ans, mariages 80 ans, décès 30 ans. Au-delà : versement aux archives. Avant ces délais : Standesamt et justification de la qualité de descendant.",
+      "portails": [
+        {
+          "nom": "Archivportal-D",
+          "url": "https://www.archivportal-d.de/",
+          "acces": "gratuit",
+          "note": "Référence environ 2 600 archives allemandes."
+        },
+        {
+          "nom": "Deutsche Digitale Bibliothek",
+          "url": "https://www.deutsche-digitale-bibliothek.de/",
+          "acces": "gratuit",
+          "note": "Portail culturel national."
+        },
+        {
+          "nom": "Matricula",
+          "url": "https://www.matricula-online.eu/",
+          "acces": "gratuit",
+          "note": "Registres catholiques de nombreux diocèses."
+        },
+        {
+          "nom": "Archion",
+          "url": "https://www.archion.de/",
+          "acces": "payant (abonnement)",
+          "note": "Registres protestants."
+        },
+        {
+          "nom": "Genealogy.net / CompGen",
+          "url": "https://www.genealogy.net/",
+          "acces": "gratuit",
+          "note": "Index, notices de localités (GOV), guides."
+        },
+        {
+          "nom": "Landesarchiv Berlin",
+          "url": "https://landesarchiv-berlin.de/familienforschung-im-landesarchiv-berlin",
+          "acces": "gratuit",
+          "note": "Registres des Standesämter berlinois + anciens territoires de l'Est."
+        }
+      ],
+      "conseils": "Pas de portail national unique : 16 Länder, chacun avec son Landesarchiv. Pour les recherches récentes : chercher « Standesamt + nom de la commune » sur le site de la ville. Attention aux territoires perdus : Prusse orientale, Silésie, etc. — voir les archives polonaises, tchèques, russes."
+    },
+    {
+      "code": "GB-ENG",
+      "nom": "Angleterre et pays de Galles",
+      "priorite": 1,
+      "motsCles": [
+        "angleterre",
+        "england",
+        "wales",
+        "galles",
+        "royaume-uni",
+        "united kingdom",
+        "uk",
+        "great britain",
+        "british",
+        "britain",
+        "royaume uni"
+      ],
+      "etatCivilDepuis": "1er juillet 1837",
+      "avantEtatCivil": "Registres paroissiaux de l'Église d'Angleterre (souvent dès le XVIe siècle)",
+      "hierarchie": "Nation → comté → district d'enregistrement → commune/paroisse",
+      "delais": "Les index sont publics ; les certificats sont payants.",
+      "portails": [
+        {
+          "nom": "FreeBMD",
+          "url": "https://www.freebmd.org.uk/",
+          "acces": "gratuit",
+          "note": "Index transcrits bénévolement (1837-1983)."
+        },
+        {
+          "nom": "GRO — Research your family history",
+          "url": "https://www.gov.uk/research-family-history",
+          "acces": "gratuit",
+          "note": "Index officiels et commande de certificats."
+        },
+        {
+          "nom": "National Archives — Guide",
+          "url": "https://www.nationalarchives.gov.uk/help-with-your-research/research-guides/birth-marriage-death-england-and-wales/",
+          "acces": "gratuit",
+          "note": "Méthode complète."
+        }
+      ],
+      "conseils": "FreeBMD d'abord pour trouver la référence (district, trimestre, volume, page), puis commande du certificat."
+    },
+    {
+      "code": "BE",
+      "nom": "Belgique",
+      "priorite": 1,
+      "motsCles": [
+        "belgique",
+        "belgium",
+        "belgië",
+        "belgie",
+        "belge",
+        "belgian",
+        "belgisch",
+        "royaume de belgique",
+        "wallonie",
+        "wallon",
+        "flandre",
+        "flamand",
+        "vlaanderen",
+        "vlaams"
+      ],
+      "etatCivilDepuis": 1797,
+      "avantEtatCivil": "Registres paroissiaux (la plupart débutent entre 1610 et 1630)",
+      "hierarchie": "Pays → province → commune → registres paroissiaux ou état civil",
+      "delais": "Naissances protégées 100 ans ; mariages et décès 75 ans. En deçà : dérogation auprès de l'agent de l'état civil de la commune.",
+      "portails": [
+        {
+          "nom": "AGATHA",
+          "url": "https://agatha.arch.be/",
+          "acces": "gratuit (inscription)",
+          "note": "Le portail de recherche des Archives de l'État. Remplace search.arch.be depuis fin 2024. 28 000 registres paroissiaux + 36 000 registres d'état civil (1796-1920)."
+        },
+        {
+          "nom": "Archives de l'État — Sources généalogiques",
+          "url": "https://www.arch.be/index.php?l=fr&m=ressources-en-ligne&r=archives-en-ligne&sr=sources-genealogiques",
+          "acces": "gratuit",
+          "note": "Page officielle décrivant les registres numérisés."
+        },
+        {
+          "nom": "Archives de l'État — Salles de lecture",
+          "url": "https://www.arch.be/index.php?l=fr&m=en-pratique&r=nos-salles-de-lecture",
+          "acces": "gratuit",
+          "note": "Un dépôt par province."
+        },
+        {
+          "nom": "Guide officiel",
+          "url": "https://www.arch.be/index.php?l=en&m=genealogist&r=genealogy-how-to-get-started",
+          "acces": "gratuit",
+          "note": "Démarche pas à pas."
+        },
+        {
+          "nom": "Just-on-web",
+          "url": "https://justice.belgium.be/fr/nouvelles/communiques_de_presse/demander_un_acte_de_mariage_de_naissance_ou_tout_autre_acte_cest",
+          "acces": "gratuit",
+          "note": "Télécharger soi-même extraits et copies d'actes."
+        },
+        {
+          "nom": "Familiekunde Vlaanderen",
+          "url": "https://familiekunde-vlaanderen.be/index/parochieregisters",
+          "acces": "gratuit",
+          "note": "Association flamande : index et registres paroissiaux."
+        }
+      ],
+      "conseils": "Les registres sont regroupés par province. Le plus simple : taper le nom de la commune sur AGATHA. Les tables décennales existent aussi."
+    },
+    {
+      "code": "GB-SCT",
+      "nom": "Écosse",
+      "priorite": 1,
+      "motsCles": [
+        "écosse",
+        "ecosse",
+        "scotland",
+        "scottish",
+        "écossais",
+        "ecossais"
+      ],
+      "etatCivilDepuis": "1er janvier 1855",
+      "avantEtatCivil": "Registres de l'Église d'Écosse (Old Parish Registers)",
+      "hierarchie": "Nation → comté → paroisse → district d'enregistrement",
+      "delais": "Consultation payante à l'acte, mais images en ligne.",
+      "portails": [
+        {
+          "nom": "ScotlandsPeople",
+          "url": "https://www.scotlandspeople.gov.uk/",
+          "acces": "payant (à l'acte)",
+          "note": "Portail officiel : statutaires depuis 1855, OPR avant, recensements."
+        }
+      ],
+      "conseils": "Les registres écossais sont les plus détaillés du Royaume-Uni (nom des deux parents, date et lieu du mariage des parents)."
+    },
+    {
+      "code": "ES",
+      "nom": "Espagne",
+      "priorite": 1,
+      "motsCles": [
+        "espagne",
+        "spain",
+        "españa",
+        "espana",
+        "espagnol"
+      ],
+      "etatCivilDepuis": 1871,
+      "avantEtatCivil": "Registres paroissiaux (souvent depuis le XVIe siècle)",
+      "hierarchie": "Pays → communauté autonome → province → commune → archivo parroquial ou Registro Civil",
+      "delais": "Variables ; les actes récents passent par le Registro Civil de la commune.",
+      "portails": [
+        {
+          "nom": "PARES",
+          "url": "https://pares.cultura.gob.es/",
+          "acces": "gratuit",
+          "note": "Portail des archives espagnoles."
+        },
+        {
+          "nom": "FamilySearch — Espagne",
+          "url": "https://www.familysearch.org/en/wiki/Spain_Civil_Registration",
+          "acces": "gratuit",
+          "note": "État civil (1871-1950 env.) et registres paroissiaux."
+        },
+        {
+          "nom": "Guide officiel du ministère",
+          "url": "https://www.cultura.gob.es/en/cultura/areas/archivos/mc/archivos/nhn/destacados/jovenes-genealogistas.html",
+          "acces": "gratuit",
+          "note": "Sources et démarches."
+        },
+        {
+          "nom": "Ministerio de Justicia — certificats",
+          "url": "https://sede.mjusticia.gob.es/eCertificados/CertificadoNacimiento.do",
+          "acces": "gratuit",
+          "note": "Demande de certificat en ligne."
+        }
+      ],
+      "conseils": "Le Registro Civil espagnol date de 1870-1871. Avant, les registres paroissiaux sont la source principale. Attention aux fonds basques (Dokuklik) et catalans."
+    },
+    {
+      "code": "FR",
+      "nom": "France",
+      "priorite": 1,
+      "motsCles": [
+        "france",
+        "french",
+        "français",
+        "francais",
+        "française",
+        "francaise",
+        "république française",
+        "republique francaise",
+        "français de france",
+        "française de france"
+      ],
+      "etatCivilDepuis": 1792,
+      "avantEtatCivil": "Registres paroissiaux (baptêmes, mariages, sépultures)",
+      "hierarchie": "Pays → région → département → commune → Archives départementales",
+      "delais": "Naissances et mariages librement communicables 75 ans après la clôture du registre ; décès libres. En pratique, chaque service décide de sa mise en ligne (beaucoup publient les naissances à ~100 ans).",
+      "portails": [
+        {
+          "nom": "FranceArchives",
+          "url": "https://francearchives.gouv.fr/fr/article/26287743",
+          "acces": "gratuit",
+          "note": "Explique qui conserve quoi."
+        },
+        {
+          "nom": "Annuaire des services d'archives",
+          "url": "https://francearchives.gouv.fr/article/38379/",
+          "acces": "gratuit",
+          "note": "Trouver le site du département."
+        },
+        {
+          "nom": "Service-Public.fr",
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F1427",
+          "acces": "gratuit",
+          "note": "Demander une copie d'acte à la mairie."
+        },
+        {
+          "nom": "Grand Mémorial",
+          "url": "https://www.grandmemorial.fr/",
+          "acces": "gratuit",
+          "note": "Mobilisés de 1914-1918."
+        },
+        {
+          "nom": "Base Léonore",
+          "url": "https://www.leonore.archives-nationales.culture.gouv.fr/",
+          "acces": "gratuit",
+          "note": "Dossiers de la Légion d'honneur."
+        },
+        {
+          "nom": "ANOM",
+          "url": "https://archives-nationales-outre-mer.culture.gouv.fr/faire-une-recherche/les-recherches-genealogiques",
+          "acces": "gratuit",
+          "note": "Colonies, Algérie, Antilles."
+        }
+      ],
+      "conseils": "Commencez par les tables décennales (série 3 E, 4 E ou « tables ») : elles donnent la date exacte. Paris : registres antérieurs à 1860 en grande partie détruits en 1871 — voir les reconstitutions."
+    },
+    {
+      "code": "IE",
+      "nom": "Irlande",
+      "priorite": 1,
+      "motsCles": [
+        "irlande",
+        "ireland",
+        "irlandais",
+        "éire",
+        "eire",
+        "irish"
+      ],
+      "etatCivilDepuis": "1864 (naissances, décès) ; 1845 (mariages non-catholiques)",
+      "avantEtatCivil": "Registres paroissiaux catholiques (accessibles via la National Library)",
+      "hierarchie": "Pays → comté → district d'enregistrement → paroisse",
+      "delais": "Actes historiques gratuits sur irishgenealogy.ie ; actes récents via le GRO.",
+      "portails": [
+        {
+          "nom": "Irish Genealogy",
+          "url": "https://www.irishgenealogy.ie/",
+          "acces": "gratuit",
+          "note": "Actes historiques numérisés (naissances 1864-1924, mariages 1845-1949, décès 1864-1974)."
+        },
+        {
+          "nom": "National Library of Ireland",
+          "url": "https://www.nli.ie/",
+          "acces": "gratuit",
+          "note": "Registres paroissiaux catholiques (avant 1864)."
+        },
+        {
+          "nom": "General Register Office",
+          "url": "https://www.gov.ie/",
+          "acces": "payant",
+          "note": "Actes récents."
+        }
+      ],
+      "conseils": "L'Irlande est le pays d'Europe où les actes historiques sont les plus accessibles gratuitement. Commencez par irishgenealogy.ie."
+    },
+    {
+      "code": "GB-NIR",
+      "nom": "Irlande du Nord",
+      "priorite": 1,
+      "motsCles": [
+        "irlande du nord",
+        "northern ireland",
+        "ulster",
+        "northern irish"
+      ],
+      "etatCivilDepuis": "1845 (mariages) / 1864 (naissances, décès)",
+      "avantEtatCivil": "Registres paroissiaux",
+      "hierarchie": "Nation → comté → district d'enregistrement",
+      "delais": "Index gratuits, certificats payants.",
+      "portails": [
+        {
+          "nom": "GRONI — nidirect",
+          "url": "https://www.nidirect.gov.uk/services/births-deaths-and-marriage-records",
+          "acces": "gratuit / payant",
+          "note": "Portail officiel."
+        }
+      ],
+      "conseils": "GRONI a un moteur de recherche en ligne ; les certificats sont commandables en ligne."
+    },
+    {
+      "code": "IT",
+      "nom": "Italie",
+      "priorite": 1,
+      "motsCles": [
+        "italie",
+        "italy",
+        "italia",
+        "italien"
+      ],
+      "etatCivilDepuis": "1809 selon les régions (période napoléonienne)",
+      "avantEtatCivil": "Registres paroissiaux, souvent aux archives diocésaines ou d'État",
+      "hierarchie": "Pays → province → comune → Archivio di Stato compétent",
+      "delais": "Variables ; le Portale Antenati publie les actes jusqu'aux années 1930 et au-delà.",
+      "portails": [
+        {
+          "nom": "Portale Antenati",
+          "url": "https://antenati.cultura.gov.it/il-portale/",
+          "acces": "gratuit",
+          "note": "Portail officiel du ministère de la Culture. Des millions d'actes, indexation collaborative."
+        },
+        {
+          "nom": "FAQ Antenati",
+          "url": "https://antenati.cultura.gov.it/the-site/faq/?lang=en",
+          "acces": "gratuit",
+          "note": "Méthode de recherche."
+        },
+        {
+          "nom": "Matricula",
+          "url": "https://www.matricula-online.eu/",
+          "acces": "gratuit",
+          "note": "Registres catholiques du nord de l'Italie."
+        },
+        {
+          "nom": "FamilySearch — Italie",
+          "url": "https://www.familysearch.org/",
+          "acces": "gratuit",
+          "note": "Grandes collections italiennes."
+        }
+      ],
+      "conseils": "Il faut connaître l'année et la commune de l'événement. Naviguer par province → commune → type d'acte."
+    },
+    {
+      "code": "LU",
+      "nom": "Luxembourg",
+      "priorite": 1,
+      "motsCles": [
+        "luxembourg",
+        "luxemburg",
+        "luxemburgeois",
+        "grand-duché de luxembourg",
+        "grand duche de luxembourg",
+        "luxembourgeois",
+        "luxembourgish"
+      ],
+      "etatCivilDepuis": 1795,
+      "avantEtatCivil": "Registres paroissiaux (via Matricula, Archives diocésaines)",
+      "hierarchie": "Pays → commune → Archives nationales ou Archives diocésaines",
+      "delais": "Actes en ligne de 1795 à 1912. Au-delà : administration communale du lieu de l'événement.",
+      "portails": [
+        {
+          "nom": "AnLux — Généalogie",
+          "url": "https://anlux.public.lu/fr/rechercher/genealogie.html",
+          "acces": "gratuit",
+          "note": "Page d'entrée des Archives nationales."
+        },
+        {
+          "nom": "AnLux — État civil en ligne",
+          "url": "https://anlux.public.lu/fr/documents-numerises/photos/etat-civil.html",
+          "acces": "gratuit",
+          "note": "Actes numérisés 1795-1912."
+        },
+        {
+          "nom": "Guide officiel de l'état civil (PDF)",
+          "url": "https://anlux.public.lu/content/dam/anlux/pdf-statiques/guide-tat-civil-092025.pdf",
+          "acces": "gratuit",
+          "note": "Méthode détaillée."
+        },
+        {
+          "nom": "Matricula — Luxembourg",
+          "url": "https://data.matricula-online.eu/de/LU/luxemburg/",
+          "acces": "gratuit",
+          "note": "Registres paroissiaux."
+        },
+        {
+          "nom": "Luxroots",
+          "url": "https://www.luxroots.org/",
+          "acces": "gratuit (association)",
+          "note": "Base bénévole 1600-1923."
+        }
+      ],
+      "conseils": "Deux ressources complémentaires : AnLux pour l'état civil, Matricula pour les registres paroissiaux."
+    },
+    {
+      "code": "NL",
+      "nom": "Pays-Bas",
+      "priorite": 1,
+      "motsCles": [
+        "pays-bas",
+        "netherlands",
+        "nederland",
+        "hollande",
+        "holland",
+        "hollandais",
+        "dutch",
+        "koninkrijk der nederlanden"
+      ],
+      "etatCivilDepuis": 1811,
+      "avantEtatCivil": "DTB — doop-, trouw- en begraafboeken (baptêmes, mariages, sépultures)",
+      "hierarchie": "Pays → province → commune → archives régionales ou municipales",
+      "delais": "Variables ; les actes d'état civil de plus de 100 ans sont généralement publics.",
+      "portails": [
+        {
+          "nom": "WieWasWie",
+          "url": "https://www.wiewaswie.nl/",
+          "acces": "gratuit",
+          "note": "Moteur national par nom."
+        },
+        {
+          "nom": "Open Archieven",
+          "url": "https://www.openarchieven.nl/?lang=en",
+          "acces": "gratuit",
+          "note": "Agrégateur libre de 200+ dépôts."
+        },
+        {
+          "nom": "Nationaal Archief — Gids",
+          "url": "https://www.nationaalarchief.nl/onderzoeken/zoekhulpen/familiegeschiedenis",
+          "acces": "gratuit",
+          "note": "Guide officiel."
+        }
+      ],
+      "conseils": "Les images des actes originaux sont sur les sites des archives régionales et municipales (stadsarchief), souvent via Open Archieven."
+    },
+    {
+      "code": "PT",
+      "nom": "Portugal",
+      "priorite": 1,
+      "motsCles": [
+        "portugal",
+        "portugais",
+        "português",
+        "portugues"
+      ],
+      "etatCivilDepuis": "XIXe siècle (progressif)",
+      "avantEtatCivil": "Registres paroissiaux (souvent dès le XVIe siècle)",
+      "hierarchie": "Pays → district → concelho → freguesia → registo paroquial ou civil",
+      "delais": "Actes de moins de 100 ans dans les conservatórias do registo civil.",
+      "portails": [
+        {
+          "nom": "DigitArq",
+          "url": "https://digitarq.arquivos.pt/en",
+          "acces": "gratuit",
+          "note": "Torre do Tombo et archives de district : 8M+ contenus, 63M+ images."
+        },
+        {
+          "nom": "Torre do Tombo — Généalogie",
+          "url": "https://antt.dglab.gov.pt/pesquisar-na-torre-do-tombo/genealogia-ou-historia-local/genealogia/",
+          "acces": "gratuit",
+          "note": "Guide officiel."
+        }
+      ],
+      "conseils": "Les registres paroissiaux couvrent la majorité des recherches avant le XXe siècle. Les images sont aussi sur FamilySearch."
+    },
+    {
+      "code": "CH",
+      "nom": "Suisse",
+      "priorite": 1,
+      "motsCles": [
+        "suisse",
+        "switzerland",
+        "schweiz",
+        "svizzera",
+        "svizra",
+        "confédération suisse",
+        "confoederatio helvetica",
+        "swiss"
+      ],
+      "etatCivilDepuis": 1876,
+      "avantEtatCivil": "Registres paroissiaux (Kirchenbücher), tenus par les paroisses catholiques ou réformées",
+      "hierarchie": "Pays → canton → commune/paroisse → Staatsarchiv cantonal",
+      "delais": "Variables selon les cantons. Les registres anciens sont versés aux archives cantonales ; les copies récentes passent par l'office cantonal de l'état civil.",
+      "portails": [
+        {
+          "nom": "Vaud — Registres d'églises",
+          "url": "https://www.vd.ch/population/etat-civil/recherche-genealogique",
+          "acces": "gratuit",
+          "note": "Environ 1562-1875 pour le canton de Vaud."
+        },
+        {
+          "nom": "Zurich — Familienforschung",
+          "url": "https://www.zh.ch/en/familie/familienforschung.html",
+          "acces": "gratuit",
+          "note": "Exemple de portail cantonal."
+        },
+        {
+          "nom": "Berne — Kirchenbücher",
+          "url": "https://www.be.ch/kirchenbuecher",
+          "acces": "gratuit",
+          "note": "Registres paroissiaux bernois."
+        },
+        {
+          "nom": "Saint-Gall",
+          "url": "https://dls.staatsarchiv.sg.ch/",
+          "acces": "gratuit",
+          "note": "Registres du canton de Saint-Gall."
+        }
+      ],
+      "conseils": "Pas de portail national unique. Identifier le canton d'abord, puis chercher « Staatsarchiv + canton » ou « Archives cantonales + canton ». FamilySearch couvre aussi de nombreux cantons."
+    },
+    {
+      "code": "AT",
+      "nom": "Autriche",
+      "priorite": 2,
+      "motsCles": [
+        "autriche",
+        "austria",
+        "österreich",
+        "osterreich"
+      ],
+      "etatCivilDepuis": 1938,
+      "avantEtatCivil": "Matriken (registres paroissiaux), tenus par les paroisses",
+      "hierarchie": "Pays → Land → paroisse → Matriken (Taufbuch, Trauungsbuch, Sterbebuch)",
+      "delais": "Les registres postérieurs à 1938 restent soumis à restrictions.",
+      "portails": [
+        {
+          "nom": "Matricula — Autriche",
+          "url": "https://www.matricula-online.eu/",
+          "acces": "gratuit",
+          "note": "Registres paroissiaux autrichiens."
+        },
+        {
+          "nom": "Matriken Tirol",
+          "url": "https://www.tirol.gv.at/kunst-kultur/landesarchiv/matriken-tirol-online/",
+          "acces": "gratuit",
+          "note": "Tyrol."
+        },
+        {
+          "nom": "Oberösterreich — DORIS",
+          "url": "https://www.doris.ooe.gv.at/",
+          "acces": "gratuit",
+          "note": "Haute-Autriche."
+        }
+      ],
+      "conseils": "Les Matriken sont la source principale avant 1938. Vienne a son propre guide officiel."
+    },
+    {
+      "code": "DK",
+      "nom": "Danemark",
+      "priorite": 2,
+      "motsCles": [
+        "danemark",
+        "denmark",
+        "danmark"
+      ],
+      "etatCivilDepuis": "XIXe siècle (progressif)",
+      "avantEtatCivil": "Kirkebøger (registres paroissiaux) — couvrent aussi l'état civil",
+      "hierarchie": "Pays → région → paroisse → Rigsarkivet",
+      "delais": "Actes anciens publics ; récents via l'état civil.",
+      "portails": [
+        {
+          "nom": "Arkivalieronline",
+          "url": "https://arkivalieronline.rigsarkivet.dk/en/",
+          "acces": "gratuit",
+          "note": "Tous les documents numérisés des Archives nationales, dont les kirkebøger."
+        }
+      ],
+      "conseils": "Navigation par paroisse. Excellent pour la généalogie."
+    },
+    {
+      "code": "FI",
+      "nom": "Finlande",
+      "priorite": 2,
+      "motsCles": [
+        "finlande",
+        "finland",
+        "suomi"
+      ],
+      "etatCivilDepuis": "XIXe siècle",
+      "avantEtatCivil": "Registres paroissiaux",
+      "hierarchie": "Pays → région → paroisse → Archives nationales",
+      "delais": "Actes anciens publics.",
+      "portails": [
+        {
+          "nom": "HisKi",
+          "url": "https://www.genealogia.fi/en/webservices/hiski/",
+          "acces": "gratuit",
+          "note": "Base des registres paroissiaux (baptêmes, mariages, sépultures, déménagements), par paroisse."
+        },
+        {
+          "nom": "Société de généalogie",
+          "url": "https://www.genealogia.fi/digital-services/",
+          "acces": "gratuit",
+          "note": "Services numériques."
+        }
+      ],
+      "conseils": "HisKi est la meilleure entrée."
+    },
+    {
+      "code": "GR",
+      "nom": "Grèce",
+      "priorite": 2,
+      "motsCles": [
+        "grèce",
+        "grece",
+        "greece",
+        "hellas",
+        "ελλάδα"
+      ],
+      "etatCivilDepuis": "1925 (état civil moderne) / registres antérieurs paroissiaux",
+      "avantEtatCivil": "Registres paroissiaux (métropoles orthodoxes)",
+      "hierarchie": "Pays → région → dème (commune) → Lixiarheio ou GAK",
+      "delais": "Variables ; les actes récents au Lixiarheio municipal.",
+      "portails": [
+        {
+          "nom": "GAK — Archives générales de l'État",
+          "url": "https://greekarchivesinventory.gak.gr/",
+          "acces": "gratuit",
+          "note": "Inventaire des fonds."
+        },
+        {
+          "nom": "Greek Family History (Newcastle)",
+          "url": "https://apps.ncl.ac.uk/GreekFamilyHistory/Page/About",
+          "acces": "gratuit",
+          "note": "Guide académique."
+        }
+      ],
+      "conseils": "Les registres de population masculine (Mitroon Arrenon) sont souvent très utiles. Les fonds locaux (Corfou, Lefkada) sont partiellement en ligne via MyHeritage."
+    },
+    {
+      "code": "HU",
+      "nom": "Hongrie",
+      "priorite": 2,
+      "motsCles": [
+        "hongrie",
+        "hungary",
+        "magyarország",
+        "magyarorszag"
+      ],
+      "etatCivilDepuis": 1895,
+      "avantEtatCivil": "Registres paroissiaux (catholiques, réformés, luthériens, juifs)",
+      "hierarchie": "Pays → comitat → commune/paroisse",
+      "delais": "Variables ; FamilySearch publie 1895-1978.",
+      "portails": [
+        {
+          "nom": "Archives nationales de Hongrie (MNL)",
+          "url": "https://mnl.gov.hu/mnl/veml/hungarian_registry",
+          "acces": "gratuit",
+          "note": "Doubles des registres d'état civil."
+        },
+        {
+          "nom": "FamilySearch — Hongrie",
+          "url": "https://www.familysearch.org/",
+          "acces": "gratuit",
+          "note": "État civil 1895-1978 et registres paroissiaux."
+        },
+        {
+          "nom": "Őskereső",
+          "url": "http://www.oskereso.hu/",
+          "acces": "gratuit",
+          "note": "Registres luthériens."
+        }
+      ],
+      "conseils": "Avant 1895, tout est paroissial. Attention au traité de Trianon (1920) : la Hongrie a perdu les deux tiers de son territoire."
+    },
+    {
+      "code": "NO",
+      "nom": "Norvège",
+      "priorite": 2,
+      "motsCles": [
+        "norvège",
+        "norvege",
+        "norway",
+        "norge"
+      ],
+      "etatCivilDepuis": "XIXe siècle",
+      "avantEtatCivil": "Kirkebøker (registres paroissiaux)",
+      "hierarchie": "Pays → comté → paroisse → Digitalarkivet",
+      "delais": "Actes anciens publics.",
+      "portails": [
+        {
+          "nom": "Digitalarkivet",
+          "url": "https://www.digitalarkivet.no/en",
+          "acces": "gratuit",
+          "note": "Registres paroissiaux numérisés, recherche par nom."
+        },
+        {
+          "nom": "Média Digitalarkivet",
+          "url": "https://media.digitalarkivet.no/en/",
+          "acces": "gratuit",
+          "note": "Archives scannées par localité."
+        }
+      ],
+      "conseils": "Très bonne couverture numérique."
+    },
+    {
+      "code": "PL",
+      "nom": "Pologne",
+      "priorite": 2,
+      "motsCles": [
+        "pologne",
+        "poland",
+        "polska"
+      ],
+      "etatCivilDepuis": "variable (XIXe, selon les anciens empires)",
+      "avantEtatCivil": "Registres paroissiaux (księgi metrykalne)",
+      "hierarchie": "Pays → voïvodie → powiat → parafia/gmina → archive diocésaine ou Archiwum Państwowe",
+      "delais": "Variables ; actes récents au USC (Urząd Stanu Cywilnego).",
+      "portails": [
+        {
+          "nom": "Szukaj w Archiwach",
+          "url": "https://www.szukajwarchiwach.gov.pl/en",
+          "acces": "gratuit",
+          "note": "Moteur officiel des archives polonaises."
+        },
+        {
+          "nom": "PRADZIAD",
+          "url": "https://www.szukajwarchiwach.gov.pl/en/web/pradziad",
+          "acces": "gratuit",
+          "note": "Où trouver les registres d'une localité — l'outil clé."
+        },
+        {
+          "nom": "Geneteka",
+          "url": "https://geneteka.genealodzy.pl/",
+          "acces": "gratuit",
+          "note": "Index bénévoles (naissances, mariages, décès)."
+        },
+        {
+          "nom": "GenBaza",
+          "url": "https://metryki.genbaza.pl/",
+          "acces": "gratuit",
+          "note": "Images numérisées."
+        }
+      ],
+      "conseils": "Attention aux changements de frontières : des registres de localités aujourd'hui en Ukraine, Biélorussie ou Lituanie se trouvent dans des archives polonaises."
+    },
+    {
+      "code": "RO",
+      "nom": "Roumanie",
+      "priorite": 2,
+      "motsCles": [
+        "roumanie",
+        "romania",
+        "românia",
+        "roumain"
+      ],
+      "etatCivilDepuis": "1865 (progressif)",
+      "avantEtatCivil": "Registres paroissiaux (orthodoxes, gréco-catholiques, réformés)",
+      "hierarchie": "Pays → județ → commune/paroisse → archive nationale ou régionale",
+      "delais": "Variables ; la plupart des actes sont aux Archives nationales.",
+      "portails": [
+        {
+          "nom": "Archives nationales roumaines",
+          "url": "https://romaniatourism.com/fr/recherches-genealogiques.html",
+          "acces": "gratuit",
+          "note": "Description des démarches."
+        },
+        {
+          "nom": "FamilySearch — Roumanie",
+          "url": "https://www.familysearch.org/",
+          "acces": "gratuit",
+          "note": "Collections partielles."
+        }
+      ],
+      "conseils": "Peu de registres en ligne au niveau national. La recherche passe par les Archives nationales et leurs antennes de județ."
+    },
+    {
+      "code": "SK",
+      "nom": "Slovaquie",
+      "priorite": 2,
+      "motsCles": [
+        "slovaquie",
+        "slovakia",
+        "slovensko"
+      ],
+      "etatCivilDepuis": "1895 (hongrois) / 1918+ (tchécoslovaque)",
+      "avantEtatCivil": "Registres paroissiaux",
+      "hierarchie": "Pays → région → paroisse → archive d'État régionale",
+      "delais": "Variables ; voir archives d'État régionales.",
+      "portails": [
+        {
+          "nom": "Slovakiana",
+          "url": "https://slovakiana.sk/",
+          "acces": "gratuit",
+          "note": "Portail culturel numérisé."
+        },
+        {
+          "nom": "FamilySearch — Slovaquie",
+          "url": "https://www.familysearch.org/",
+          "acces": "gratuit",
+          "note": "Collections de registres paroissiaux."
+        }
+      ],
+      "conseils": "Les archives d'État régionales (Bratislava, Banská Bystrica, Prešov, Košice, Levoča) conservent les originaux."
+    },
+    {
+      "code": "SE",
+      "nom": "Suède",
+      "priorite": 2,
+      "motsCles": [
+        "suède",
+        "suede",
+        "sweden",
+        "sverige"
+      ],
+      "etatCivilDepuis": "XIXe siècle",
+      "avantEtatCivil": "Kyrkoarkiv (registres paroissiaux) — couvrent aussi l'état civil",
+      "hierarchie": "Pays → comté → paroisse → Riksarkivet",
+      "delais": "Actes anciens publics.",
+      "portails": [
+        {
+          "nom": "Riksarkivet",
+          "url": "https://sok.riksarkivet.se/en",
+          "acces": "gratuit (inscription)",
+          "note": "Dizaines de millions de pages numérisées, classées par comté et paroisse."
+        }
+      ],
+      "conseils": "Les registres paroissiaux suédois sont parmi les plus complets d'Europe."
+    },
+    {
+      "code": "CZ",
+      "nom": "Tchéquie",
+      "priorite": 2,
+      "motsCles": [
+        "tchéquie",
+        "tchequie",
+        "czech",
+        "czechia",
+        "česko",
+        "cesko"
+      ],
+      "etatCivilDepuis": "1850 (registres civils pour non-catholiques) / 1949 (généralisé)",
+      "avantEtatCivil": "Registres paroissiaux (matriky)",
+      "hierarchie": "Pays → région → paroisse → archive régionale",
+      "delais": "Naissances 100 ans, mariages 75 ans, décès 75 ans (loi tchèque).",
+      "portails": [
+        {
+          "nom": "Acta Publica",
+          "url": "https://www.actapublica.eu/",
+          "acces": "gratuit",
+          "note": "Moravie du Sud (Brno)."
+        },
+        {
+          "nom": "DigiArchiv",
+          "url": "https://digi.ceskearchivy.cz/tree.php?doctree=1",
+          "acces": "gratuit",
+          "note": "Bohême et Moravie."
+        },
+        {
+          "nom": "Archiv Prague",
+          "url": "https://ebadatelna.soapraha.cz/",
+          "acces": "gratuit",
+          "note": "Prague."
+        }
+      ],
+      "conseils": "La numérisation se poursuit. Les registres paroissiaux couvrent la majorité des recherches avant 1949."
+    },
+    {
+      "code": "AL",
+      "nom": "Albanie",
+      "priorite": 3,
+      "motsCles": [
+        "albanie",
+        "albania",
+        "shqipëria",
+        "shqiperia"
+      ],
+      "etatCivilDepuis": "1912 (indépendance) / organisé ensuite",
+      "avantEtatCivil": "Registres paroissiaux et ottomans",
+      "hierarchie": "Pays → préfecture → municipalité → bureau de statut civil",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "FamilySearch — Albania",
+          "url": "https://www.familysearch.org/en/wiki/Albania_Civil_Registration",
+          "acces": "gratuit",
+          "note": "Guide officiel."
+        }
+      ],
+      "conseils": "Les bureaux de statut civil des municipalités tiennent l'état civil. Peu de numérisation."
+    },
+    {
+      "code": "AD",
+      "nom": "Andorre",
+      "priorite": 3,
+      "motsCles": [
+        "andorre",
+        "andorra"
+      ],
+      "etatCivilDepuis": "XIXe-XXe",
+      "avantEtatCivil": "Registres paroissiaux",
+      "hierarchie": "Pays → paroisse → Arxiu Nacional",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "Arxiu Nacional d'Andorra",
+          "url": "https://www.govern.ad/ca/tematiques/cultura-i-esports/arxiu-nacional/cerca-a-l-arxiu-nacional/els-fons-documentals",
+          "acces": "gratuit",
+          "note": "Fonds documentaires."
+        }
+      ],
+      "conseils": "Catalogues en ligne."
+    },
+    {
+      "code": "BY",
+      "nom": "Biélorussie",
+      "priorite": 3,
+      "motsCles": [
+        "biélorussie",
+        "bielorussie",
+        "belarus",
+        "беларусь"
+      ],
+      "etatCivilDepuis": "1919 (soviétique)",
+      "avantEtatCivil": "Registres paroissiaux (métriques)",
+      "hierarchie": "Pays → voblast → commune → archive nationale",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "Archives of Belarus",
+          "url": "https://archives.gov.by/en/welcome-to-the-archives-of-belarus-website/genealogy-family-history",
+          "acces": "gratuit",
+          "note": "Portail officiel."
+        },
+        {
+          "nom": "NIAB Minsk",
+          "url": "https://niab.by/newsite/en/our-holdings",
+          "acces": "gratuit",
+          "note": "Archives historiques nationales."
+        }
+      ],
+      "conseils": "Les registres anciens sont aux Archives historiques nationales."
+    },
+    {
+      "code": "BA",
+      "nom": "Bosnie-Herzégovine",
+      "priorite": 3,
+      "motsCles": [
+        "bosnie",
+        "bosnia",
+        "herzégovine",
+        "herzegovina",
+        "bosna"
+      ],
+      "etatCivilDepuis": "Variable (fin XIXe)",
+      "avantEtatCivil": "Registres paroissiaux (catholiques, orthodoxes, musulmans)",
+      "hierarchie": "Pays → canton → commune → archive cantonale",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "Arhiv Bosne i Hercegovine",
+          "url": "https://arhivbih.gov.ba/",
+          "acces": "gratuit",
+          "note": "Archives d'État (Sarajevo)."
+        }
+      ],
+      "conseils": "Matricula met en ligne des actes de naissance bosniens."
+    },
+    {
+      "code": "BG",
+      "nom": "Bulgarie",
+      "priorite": 3,
+      "motsCles": [
+        "bulgarie",
+        "bulgaria",
+        "българия"
+      ],
+      "etatCivilDepuis": "Fin XIXe siècle",
+      "avantEtatCivil": "Registres paroissiaux et ottomans",
+      "hierarchie": "Pays → oblast → commune → archive régionale",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "FamilySearch — Bulgarie",
+          "url": "https://www.familysearch.org/en/wiki/Bulgaria_Civil_Registration",
+          "acces": "gratuit",
+          "note": "Guide officiel."
+        }
+      ],
+      "conseils": "Très peu de registres en ligne. Recherche aux archives régionales et bureaux d'état civil."
+    },
+    {
+      "code": "CY",
+      "nom": "Chypre",
+      "priorite": 3,
+      "motsCles": [
+        "chypre",
+        "cyprus",
+        "κύπρος"
+      ],
+      "etatCivilDepuis": "XXe siècle",
+      "avantEtatCivil": "Registres paroissiaux orthodoxes",
+      "hierarchie": "Pays → district → municipalité ou diocèse",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "FamilySearch — Cyprus",
+          "url": "https://www.familysearch.org/en/wiki/Cyprus_Church_Records",
+          "acces": "gratuit",
+          "note": "Guide des registres d'église."
+        }
+      ],
+      "conseils": "Peu de numérisation ; contacts avec les diocèses."
+    },
+    {
+      "code": "HR",
+      "nom": "Croatie",
+      "priorite": 3,
+      "motsCles": [
+        "croatie",
+        "croatia",
+        "hrvatska"
+      ],
+      "etatCivilDepuis": "Variable (XIXe-XXe)",
+      "avantEtatCivil": "Registres paroissiaux (matične knjige)",
+      "hierarchie": "Pays → comitat → paroisse → archive d'État régionale",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "Archives d'État croates",
+          "url": "https://www.arhiv.hr/en-gb/Search-the-records/Highlighted-topic-Genealogy",
+          "acces": "gratuit",
+          "note": "Questions généalogiques."
+        },
+        {
+          "nom": "Archives de Pazin (Istrie)",
+          "url": "https://www.dapa.hr/en/maticne-knjige/",
+          "acces": "gratuit",
+          "note": "Exemple régional."
+        }
+      ],
+      "conseils": "FamilySearch a des livres paroissiaux croates de 1516 à 1994."
+    },
+    {
+      "code": "EE",
+      "nom": "Estonie",
+      "priorite": 3,
+      "motsCles": [
+        "estonie",
+        "estonia",
+        "eesti"
+      ],
+      "etatCivilDepuis": "1920s",
+      "avantEtatCivil": "Registres paroissiaux",
+      "hierarchie": "Pays → comté → paroisse → Rahvusarhiiv",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "Rahvusarhiiv — VAU",
+          "url": "https://www.ra.ee/vau/index.php/en/page/article/index?menuId=16",
+          "acces": "gratuit",
+          "note": "Registres paroissiaux et demandes de recherche."
+        }
+      ],
+      "conseils": "Portail national unique."
+    },
+    {
+      "code": "IS",
+      "nom": "Islande",
+      "priorite": 3,
+      "motsCles": [
+        "islande",
+        "iceland",
+        "ísland"
+      ],
+      "etatCivilDepuis": "XIXe siècle",
+      "avantEtatCivil": "Registres paroissiaux et recensements (manntöl)",
+      "hierarchie": "Pays → région → paroisse",
+      "delais": "Actes anciens publics.",
+      "portails": [
+        {
+          "nom": "Íslendingabók",
+          "url": "https://www.islendingabok.is/",
+          "acces": "gratuit (inscription)",
+          "note": "Base généalogique nationale."
+        },
+        {
+          "nom": "Archives nationales",
+          "url": "https://www.islendingabok.is/",
+          "acces": "gratuit",
+          "note": "Recensements anciens."
+        }
+      ],
+      "conseils": "Íslendingabók couvre 1200 ans de généalogie islandaise. Expérience unique au monde."
+    },
+    {
+      "code": "LV",
+      "nom": "Lettonie",
+      "priorite": 3,
+      "motsCles": [
+        "lettonie",
+        "latvia",
+        "latvija"
+      ],
+      "etatCivilDepuis": "1920s",
+      "avantEtatCivil": "Registres paroissiaux (toutes confessions, dont juifs)",
+      "hierarchie": "Pays → région → paroisse → Archives nationales",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "Raduraksti",
+          "url": "https://raduraksti.arhivi.lv/",
+          "acces": "gratuit",
+          "note": "Bibliothèque virtuelle des Archives nationales."
+        }
+      ],
+      "conseils": "Registres de toutes confessions et listes de révision."
+    },
+    {
+      "code": "LI",
+      "nom": "Liechtenstein",
+      "priorite": 3,
+      "motsCles": [
+        "liechtenstein"
+      ],
+      "etatCivilDepuis": "XIXe-XXe",
+      "avantEtatCivil": "Registres paroissiaux",
+      "hierarchie": "Pays → commune → Landesarchiv",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "Landesarchiv",
+          "url": "https://www.llv.li/de/landesverwaltung/amt-fuer-kultur/landesarchiv",
+          "acces": "gratuit",
+          "note": "Archives d'État et familiales."
+        }
+      ],
+      "conseils": "Service aux usagers en anglais."
+    },
+    {
+      "code": "LT",
+      "nom": "Lituanie",
+      "priorite": 3,
+      "motsCles": [
+        "lituanie",
+        "lithuania",
+        "lietuva"
+      ],
+      "etatCivilDepuis": "XIXe-XXe",
+      "avantEtatCivil": "Registres paroissiaux",
+      "hierarchie": "Pays → apskritis → paroisse → Archives historiques d'État",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "Epaveldas",
+          "url": "https://epaveldas.lt/",
+          "acces": "gratuit",
+          "note": "La plus grande base de données lituanienne."
+        },
+        {
+          "nom": "Lithuanian Genealogy",
+          "url": "http://www.lithuaniangenealogy.eu/ABOUT-GENEALOGY/",
+          "acces": "gratuit",
+          "note": "Présentation des archives historiques d'État."
+        }
+      ],
+      "conseils": "Les originaux sont aux Archives historiques d'État de Vilnius."
+    },
+    {
+      "code": "MK",
+      "nom": "Macédoine du Nord",
+      "priorite": 3,
+      "motsCles": [
+        "macédoine",
+        "macedoine",
+        "macedonia",
+        "makedonija"
+      ],
+      "etatCivilDepuis": "Variable",
+      "avantEtatCivil": "Registres paroissiaux et ottomans",
+      "hierarchie": "Pays → région → commune → archive de district",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "Državen Arhiv",
+          "url": "https://arhiv.mk/en/",
+          "acces": "gratuit",
+          "note": "Archives d'État (Skopje)."
+        }
+      ],
+      "conseils": "Réseau d'archives de district."
+    },
+    {
+      "code": "MT",
+      "nom": "Malte",
+      "priorite": 3,
+      "motsCles": [
+        "malte",
+        "malta",
+        "maltese"
+      ],
+      "etatCivilDepuis": "XIXe siècle",
+      "avantEtatCivil": "Registres paroissiaux (depuis les années 1530)",
+      "hierarchie": "Pays → paroisse → Public Registry ou archives paroissiales",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "Identità — Public Registry",
+          "url": "https://identita.gov.mt/public-registry-main-page/",
+          "acces": "gratuit",
+          "note": "Portail d'état civil."
+        },
+        {
+          "nom": "Malta Roots",
+          "url": "https://maltaroots.com/maltese-records",
+          "acces": "gratuit",
+          "note": "Index bénévole paroissial et notarial."
+        }
+      ],
+      "conseils": "Les registres paroissiaux maltais remontent aux années 1530."
+    },
+    {
+      "code": "MD",
+      "nom": "Moldavie",
+      "priorite": 3,
+      "motsCles": [
+        "moldavie",
+        "moldova"
+      ],
+      "etatCivilDepuis": "1812 (Bessarabie russe) / 1918+ (roumain) / 1940+ (soviétique)",
+      "avantEtatCivil": "Registres paroissiaux",
+      "hierarchie": "Pays → raion → commune → Archives nationales",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "Archives nationales de Moldavie",
+          "url": "https://logos-pres.md/en/news/a-database-of-parish-records-will-be-created-in-moldova/",
+          "acces": "gratuit",
+          "note": "Projet en cours."
+        },
+        {
+          "nom": "JewishGen Bessarabia",
+          "url": "https://www.jewishgen.org/Bessarabia/",
+          "acces": "gratuit",
+          "note": "Racines juives de Bessarabie."
+        }
+      ],
+      "conseils": "Base en cours de création."
+    },
+    {
+      "code": "MC",
+      "nom": "Monaco",
+      "priorite": 3,
+      "motsCles": [
+        "monaco",
+        "monégasque",
+        "monegasque"
+      ],
+      "etatCivilDepuis": "XIXe siècle",
+      "avantEtatCivil": "Registres paroissiaux",
+      "hierarchie": "Pays → Mairie ou Archives de la Ville",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "Mairie de Monaco — État civil",
+          "url": "https://www.mairie.mc/etat-civil-2",
+          "acces": "gratuit",
+          "note": "État civil monégasque."
+        },
+        {
+          "nom": "Archives de la Ville de Monaco",
+          "url": "https://archives.mairie.mc/",
+          "acces": "gratuit",
+          "note": "Registres anciens."
+        }
+      ],
+      "conseils": "Depuis 2024, versement au Service du Fonds Patrimonial."
+    },
+    {
+      "code": "ME",
+      "nom": "Monténégro",
+      "priorite": 3,
+      "motsCles": [
+        "monténégro",
+        "montenegro",
+        "crna gora"
+      ],
+      "etatCivilDepuis": "Variable",
+      "avantEtatCivil": "Registres paroissiaux",
+      "hierarchie": "Pays → municipalité → archive d'État",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "Archives d'État du Monténégro",
+          "url": "https://dacg.me/about-us/",
+          "acces": "gratuit",
+          "note": "Cetinje."
+        }
+      ],
+      "conseils": "Tout est centralisé dans un registre national."
+    },
+    {
+      "code": "RU",
+      "nom": "Russie",
+      "priorite": 3,
+      "motsCles": [
+        "russie",
+        "russia",
+        "россия"
+      ],
+      "etatCivilDepuis": "1918 (ZAGS soviétique) / registres antérieurs paroissiaux",
+      "avantEtatCivil": "Metricheskie knigi (registres de métiques des paroisses orthodoxes)",
+      "hierarchie": "Pays → oblast → commune → archive régionale",
+      "delais": "Accès très restreint pour les actes soviétiques.",
+      "portails": [
+        {
+          "nom": "Metricabook.ru",
+          "url": "https://metricabook.ru/",
+          "acces": "gratuit",
+          "note": "Registres de métiques XIXe-début XXe."
+        },
+        {
+          "nom": "Roots of Russia",
+          "url": "https://rootsofrussia.com/",
+          "acces": "gratuit/payant",
+          "note": "Nord de la Russie, Carélie."
+        }
+      ],
+      "conseils": "Les registres pré-révolutionnaires sont dans les archives régionales des oblasts."
+    },
+    {
+      "code": "SM",
+      "nom": "Saint-Marin",
+      "priorite": 3,
+      "motsCles": [
+        "saint-marin",
+        "san marino"
+      ],
+      "etatCivilDepuis": "XIXe-XXe",
+      "avantEtatCivil": "Registres paroissiaux",
+      "hierarchie": "Pays → château → Archivio di Stato",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "Archivio di Stato",
+          "url": "https://www.gov.sm/pub2/GovSM/Dipartimenti/Dipartimento-Istruzione-e-Cultura/Istituti-Culturali/Archivio-di-Stato.html",
+          "acces": "gratuit",
+          "note": "Patrimoine documentaire."
+        }
+      ],
+      "conseils": "Séries anciennes partiellement en ligne."
+    },
+    {
+      "code": "RS",
+      "nom": "Serbie",
+      "priorite": 3,
+      "motsCles": [
+        "serbie",
+        "serbia",
+        "srbija"
+      ],
+      "etatCivilDepuis": "1895 (selon régions)",
+      "avantEtatCivil": "Registres paroissiaux",
+      "hierarchie": "Pays → province → commune → archive",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "Ministère — Civil records",
+          "url": "https://mduls.gov.rs/en/registers-and-databases/civil-records/",
+          "acces": "gratuit",
+          "note": "Où trouver les registres."
+        },
+        {
+          "nom": "Archives d'État de Serbie",
+          "url": "https://arhivsrbije.rs/en/for-the-researches/faq",
+          "acces": "gratuit",
+          "note": "Accès chercheurs étrangers."
+        }
+      ],
+      "conseils": "Voïvodine : archives provinciales. Matricula couvre certains diocèses."
+    },
+    {
+      "code": "SI",
+      "nom": "Slovénie",
+      "priorite": 3,
+      "motsCles": [
+        "slovénie",
+        "slovenie",
+        "slovenia",
+        "slovenija"
+      ],
+      "etatCivilDepuis": "Variable (XIXe-XXe)",
+      "avantEtatCivil": "Registres paroissiaux",
+      "hierarchie": "Pays → région → paroisse → archive régionale",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "Archives de la République de Slovénie",
+          "url": "https://www.gov.si/en/state-authorities/bodies-within-ministries/archives-of-the-republic-of-slovenia/",
+          "acces": "gratuit",
+          "note": "Salle de lecture virtuelle."
+        },
+        {
+          "nom": "Slovenian Genealogy Society",
+          "url": "https://sgsi.wildapricot.org/SloveniaResourcesHome/",
+          "acces": "gratuit",
+          "note": "Ressources par région."
+        }
+      ],
+      "conseils": "Matricula couvre aussi des registres slovènes."
+    },
+    {
+      "code": "UA",
+      "nom": "Ukraine",
+      "priorite": 3,
+      "motsCles": [
+        "ukraine",
+        "ukraina",
+        "україна"
+      ],
+      "etatCivilDepuis": "1919 (soviétique) / registres antérieurs paroissiaux",
+      "avantEtatCivil": "Registres paroissiaux (métriques)",
+      "hierarchie": "Pays → oblast → commune → archive régionale",
+      "delais": "Variables.",
+      "portails": [
+        {
+          "nom": "Archives d'Ukraine — Bases de données",
+          "url": "https://old.archives.gov.ua/Db/",
+          "acces": "gratuit",
+          "note": "Registres de métiques."
+        },
+        {
+          "nom": "TsDIAK Kyiv",
+          "url": "https://old.archives.gov.ua/Eng/Archives/ca03.php",
+          "acces": "gratuit",
+          "note": "Archives historiques centrales."
+        }
+      ],
+      "conseils": "Les étrangers ont les mêmes droits que les citoyens. Les deux grands dépôts sont Kyiv et Lviv."
+    }
+  ]
+}

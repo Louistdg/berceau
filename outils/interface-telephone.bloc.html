@@ -1,0 +1,142 @@
+<!-- INTERFACE-TELEPHONE:DEBUT -->
+<style id="interface-telephone">
+/* Telephone : une barre, l'arbre, une pastille de zoom.
+   Tout le reste part dans le menu. Les blocs precedents sont neutralises ici. */
+@media (max-width: 720px) {
+  html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+  .shell { height: 100dvh; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+
+  .top { flex: 0 0 56px; height: 56px; min-height: 56px; padding: 6px 8px; gap: 5px;
+         flex-wrap: nowrap; align-items: center; position: relative; }
+  .top > .brand { display: none !important; }
+  .top > .mobile-menu { flex: 0 0 44px; width: 44px; height: 44px; min-width: 44px; padding: 0; border-radius: 12px; }
+  .top > .search { flex: 1 1 0 !important; width: 0 !important; min-width: 0 !important; max-width: 168px !important; order: 2; margin: 0; }
+  .top > .search input { height: 44px; min-width: 0 !important; width: 100% !important; font-size: 15px; padding: 8px 10px 8px 32px; border-radius: 12px; }
+  .top > .search:before { left: 10px; top: 11px; font-size: 18px; }
+  .top > .topactions { order: 4; flex: 0 0 auto !important; display: flex; margin: 0 0 0 auto !important; width: auto !important; max-width: none !important; }
+  .topactions .btn:not(.theme-btn) { display: none !important; }
+  .topactions .btn.theme-btn { display: flex !important; flex-direction: row !important; align-items: center !important;
+    width: auto !important; height: 44px !important; min-width: 0 !important; max-width: 96px !important; flex: 0 0 auto !important;
+    padding: 0 7px !important; font-size: 0 !important; gap: 5px !important; border-radius: 12px;
+    border: 1px solid var(--line, #38404e); background: var(--white, #232935); overflow: hidden; }
+  .topactions .btn.theme-btn .nom { display: inline !important; font-size: 11px !important; font-weight: 600;
+    color: var(--ink, #eaf0f8); line-height: 1; white-space: nowrap; }
+  .topactions .btn.theme-btn .fleche { display: none !important; }
+  .topactions .btn.theme-btn .pastille { width: 12px !important; height: 12px !important; flex: 0 0 12px !important;
+    box-shadow: inset 0 0 0 1px #0000002e; }
+  .top .generation-control { order: 3; position: static !important; inset: auto !important; flex: 0 0 auto;
+    margin: 0; padding: 0; border: 0; background: transparent; box-shadow: none; display: flex; }
+  .top .generation-control select { height: 44px; min-height: 44px; width: auto !important; min-width: 0 !important;
+    max-width: 60px !important; font-size: 11.5px; padding: 0 2px; border-radius: 12px; }
+
+  .layout { flex: 1 1 auto; min-height: 0; display: block !important; height: auto !important; max-height: none !important; overflow: hidden; }
+  .main { height: 100%; min-height: 0; display: flex; flex-direction: column; padding: 0 6px 6px; overflow: hidden; }
+  .heading, .metrics, .legend, #repere, .note, .signature { display: none !important; }
+
+  /* La barre d'outils devient une pastille flottante : zoom et « Tout voir ». */
+  .toolbar { position: fixed; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 6;
+    display: flex; align-items: center; gap: 6px; height: auto; min-height: 0; flex: 0 0 auto;
+    margin: 0; padding: 6px; background: var(--white, #232935);
+    border: 1px solid var(--line, #38404e); border-radius: 16px; box-shadow: 0 10px 26px #0005; overflow: visible; }
+  .toolbar .spacer, .toolbar #up, .toolbar #down, .toolbar #both, .toolbar #center,
+  .toolbar #toggleDad, .toolbar #toggleMom, .toolbar #export, .toolbar #pathback,
+  .toolbar #depthminus, .toolbar #depthplus { display: none !important; }
+  .toolbar .btn { min-height: 46px; min-width: 46px; padding: 0 12px; font-size: 15px; border-radius: 10px;
+    background: transparent !important; color: var(--ink, #eaf0f8) !important; border: 1px solid var(--line, #38404e) !important; }
+  .toolbar #fit { min-width: 74px; font-size: 13px; }
+
+  .main > .canvas { flex: 1 1 auto; height: auto; min-height: 0; margin: 0; border: 0; border-radius: 0; }
+  /* Le texte des cartes reste visible et lisible a l'echelle du telephone. */
+  #tree .person text.tname { display: block !important; font-size: 17px !important; }
+  #tree .person text.tdates { display: block !important; font-size: 12.5px !important; }
+  #tree .person text.tshort, #tree .person text.tyears, #tree .person text.tinit { display: none !important; }
+  #reperes { display: none !important; }
+  .toast { display: none !important; }
+  .panel { height: 100dvh; max-height: 100dvh; padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+}
+
+@media (min-width: 851px) {
+  .layout > aside { overflow-y: auto; overscroll-behavior: contain; padding-bottom: 46px; }
+}
+</style>
+<script id="interface-telephone-script">(function(){
+  'use strict';
+  var mq = window.matchMedia('(max-width: 720px)');
+  var top = document.querySelector('.top');
+  var toolbar = document.querySelector('.toolbar');
+  var gen = document.querySelector('.generation-control');
+  var sel = document.getElementById('depth');
+  var reduit = false;
+
+  function ajouterOption(){
+    if(!sel || sel.querySelector('option[value="1"]')) return;
+    var o = document.createElement('option');
+    o.value = '1';
+    o.textContent = '2 générations';
+    sel.insertBefore(o, sel.firstChild);
+  }
+
+  function etiquettes(){
+    if(!sel) return;
+    [].forEach.call(sel.options, function(o){
+      if(!o.dataset.long) o.dataset.long = o.textContent;
+      o.textContent = mq.matches ? o.dataset.long.replace('générations','gén.') : o.dataset.long;
+    });
+  }
+
+  function placeholder(){
+    var inp = document.getElementById('search');
+    if(!inp) return;
+    if(!inp.dataset.long) inp.dataset.long = inp.placeholder;
+    inp.placeholder = mq.matches ? 'Rechercher' : inp.dataset.long;
+  }
+
+  function changer(valeur){
+    if(!sel) return;
+    sel.value = valeur;
+    sel.dispatchEvent(new Event('change', {bubbles: true}));
+  }
+
+  function placer(){
+    if(!gen || !top || !toolbar) return;
+    if(mq.matches){
+      if(gen.parentElement !== top) top.appendChild(gen);
+    } else {
+      if(gen.parentElement !== toolbar){
+        var z = document.getElementById('zoomout');
+        if(z) toolbar.insertBefore(gen, z); else toolbar.appendChild(gen);
+      }
+      if(reduit && sel && sel.value === '1'){ reduit = false; changer('2'); }
+    }
+  }
+
+  function demarrer(){
+    top = document.querySelector('.top');
+    toolbar = document.querySelector('.toolbar');
+    gen = document.querySelector('.generation-control');
+    sel = document.getElementById('depth');
+    ajouterOption();
+    etiquettes();
+    placeholder();
+    placer();
+    if(mq.matches && sel && sel.value === '2' && !reduit){ reduit = true; changer('1'); }
+    
+  }
+
+  setInterval(demarrer, 700);
+  function dessus(){
+    var vp = document.getElementById('viewport'); if(!vp) return;
+    var ps = [].slice.call(vp.querySelectorAll('.person'));
+    if(!ps.length) return;
+    if(vp.lastElementChild !== ps[ps.length-1]){
+      ps.forEach(function(g){ vp.appendChild(g); });
+      [].slice.call(vp.querySelectorAll('.branch-toggle')).forEach(function(t){ vp.appendChild(t); });
+    }
+  }
+  setInterval(dessus, 600);
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
+  else demarrer();
+  setTimeout(demarrer, 1000);
+  if(mq.addEventListener) mq.addEventListener('change', placer); else mq.addListener(placer);
+})();</script>
+<!-- INTERFACE-TELEPHONE:FIN -->
