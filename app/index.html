@@ -4113,6 +4113,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   window.addEventListener('load',function(){chargerArbre();});
   setTimeout(function(){if(document.readyState==='complete')chargerArbre();},0);
   window.addEventListener('storage',function(event){if(event.key===CLE_REGISTRE)chargerArbre();});
+  window.berceauPhotos=urls; window.berceauPhotoDe=function(id){return urls[id]||'';};
 })();
 </script>
 <style id="page-archives-style">
@@ -6724,3 +6725,84 @@ aside .nav button{min-height:42px;font-size:13.5px}
   .panel:after{ content:""; position:sticky; bottom:0; display:block; height:1px }
 }
 </style>
+
+<style id="bulles-photos-css">
+.photo-bulle{pointer-events:none}
+.union-years text{font-weight:600}
+</style>
+<script id="bulles-photos">(function(){
+  'use strict';
+  var NS='http://www.w3.org/2000/svg';
+  function svgTree(){return document.getElementById('tree');}
+  function familles(){return (window.FAMILY_DATA&&window.FAMILY_DATA.families)||[];}
+  function decorerPhotos(){
+    var svg=svgTree(); if(!svg) return;
+    var photos=window.berceauPhotos||{}; var getUrl=window.berceauPhotoDe||function(id){return photos[id]||'';};
+    [].forEach.call(svg.querySelectorAll('g.person[data-person]'),function(g){
+      var id=g.getAttribute('data-person');
+      var url=getUrl(id);
+      if(!url||g.querySelector('.photo-bulle')) return;
+      var face=g.querySelector('.card-face'); if(!face) return;
+      var x=parseFloat(face.getAttribute('x')), y=parseFloat(face.getAttribute('y'));
+      var cx=x+28, cy=y+25, r=14;
+      var clip='pc-'+id.replace(/[^A-Za-z0-9_-]/g,'');
+      var defs=svg.querySelector('defs');
+      if(!defs){defs=document.createElementNS(NS,'defs');svg.insertBefore(defs,svg.firstChild);}
+      if(!svg.querySelector('#'+clip)){
+        var cp=document.createElementNS(NS,'clipPath'); cp.setAttribute('id',clip);
+        var ci=document.createElementNS(NS,'circle'); ci.setAttribute('cx',cx); ci.setAttribute('cy',cy); ci.setAttribute('r',r);
+        cp.appendChild(ci); defs.appendChild(cp);
+      }
+      var av=g.querySelector('.gender-avatar'); if(av) av.style.display='none';
+      var img=document.createElementNS(NS,'image');
+      img.setAttribute('class','photo-bulle');
+      img.setAttribute('href',url); img.setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',url);
+      img.setAttribute('x',cx-r); img.setAttribute('y',cy-r);
+      img.setAttribute('width',r*2); img.setAttribute('height',r*2);
+      img.setAttribute('preserveAspectRatio','xMidYMid slice');
+      img.setAttribute('clip-path','url(#'+clip+')');
+      var ring=document.createElementNS(NS,'circle');
+      ring.setAttribute('class','photo-bulle'); ring.setAttribute('cx',cx); ring.setAttribute('cy',cy); ring.setAttribute('r',r);
+      ring.setAttribute('fill','none'); ring.setAttribute('stroke','var(--gold,#c9a227)'); ring.setAttribute('stroke-width','1.6');
+      g.appendChild(img); g.appendChild(ring);
+    });
+  }
+  function decorerUnions(){
+    var svg=svgTree(); if(!svg) return;
+    var fams=familles(); if(!fams.length) return;
+    [].forEach.call(svg.querySelectorAll('.union-badge[data-fam]'),function(badge){
+      var famId=badge.getAttribute('data-fam');
+      var fam=null; for(var i=0;i<fams.length;i++){if(fams[i].id===famId){fam=fams[i];break;}}
+      if(!fam||!fam.marriage||!fam.marriage.exists) return;
+      var an=parseInt(String(fam.marriage.date||'').slice(0,4),10); if(!an) return;
+      var fin=new Date().getFullYear();
+      var div=(fam.events||[]).filter(function(e){return e&&e.type==='DIV';})[0];
+      if(div&&div.date){var dy=parseInt(String(div.date).slice(0,4),10); if(dy) fin=dy;}
+      var ans=fin-an; if(ans<0) return;
+      var txt=ans===0?'< 1 an':ans+(ans>1?' ans':' an');
+      var rect=badge.querySelector('rect');
+      var ux=parseFloat(rect.getAttribute('x'))+7, uy=parseFloat(rect.getAttribute('y'))+7;
+      var ancien=badge.querySelector('.union-year'); if(ancien) ancien.remove();
+      var old=badge.querySelector('.union-years'); if(old) old.remove();
+      var g=document.createElementNS(NS,'g'); g.setAttribute('class','union-years');
+      var w=Math.round(40+txt.length*5.8);
+      function mk(tag,attrs){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);return e;}
+      g.appendChild(mk('rect',{x:ux+11,y:uy-12,width:w,height:24,rx:12,fill:'var(--paper,#f6f5f0)',stroke:'var(--line,#e4e3da)'}));
+      var rings=mk('g',{fill:'none',stroke:'var(--gold,#c9a227)','stroke-width':'1.6'});
+      rings.appendChild(mk('circle',{cx:ux+21,cy:uy,r:5}));
+      rings.appendChild(mk('circle',{cx:ux+26.5,cy:uy,r:5}));
+      g.appendChild(rings);
+      g.appendChild(mk('text',{x:ux+35,y:uy+3.9,'font-size':'11',fill:'var(--gold,#c9a227)'})).textContent=txt;
+      badge.appendChild(g);
+    });
+  }
+  function appliquer(){ decorerPhotos(); decorerUnions(); }
+  var tmr=null; function planifier(){ clearTimeout(tmr); tmr=setTimeout(appliquer,90); }
+  function surveiller(){
+    var svg=svgTree(); if(!svg) return;
+    new MutationObserver(planifier).observe(document.body,{childList:true,subtree:true});
+    setInterval(appliquer,1500);
+    planifier();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(surveiller,1200);});else setTimeout(surveiller,1200);
+})();</script>
