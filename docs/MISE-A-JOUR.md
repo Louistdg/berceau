@@ -205,3 +205,11 @@ Vérifications en ligne :
 
 - Captures : `captures/audit-archives-live.png`, `audit-focus-carte.png`, `audit-final-pc.png`, `audit-final-390.png`.
 - Contrôles après envoi : 1440 px 8 cartes, 390 px 3 cartes, aucun débordement, aucune erreur console.
+
+## 15. GitHub et bouton de thème — 19/10/2026 20 h 45
+
+- Dépôt renommé **`Louistdg/notre-histoire-` → `Louistdg/berceau`** (l'ancienne URL redirige en 301).
+- Contenu remplacé : `app/index.html` (775 847 o), `app/favicon.svg`, `data/` (démo + archives), `design/`, `docs/`, `outils/`, `landing/`, README réécrit.
+- Description et site web du dépôt renseignés (`https://berceau.socle-construction.be`).
+- Commit `78097dd` sur `main`.
+- **Bouton de thème sur téléphone** : 76 px → **103 × 44 px**, bordure claire, nom en gras, chevron. En ligne.
