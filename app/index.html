@@ -6282,6 +6282,8 @@ aside .nav button{min-height:42px;font-size:13.5px}
 <script id="album-souvenirs-script">(function(){
   'use strict';
   var DATA=null, chargement=false, erreur=null, filtreOccasion='Tous', filtreDecennie='', filtrePersonne='';
+  var triDate='asc', vueListe=[], vueIndex=0;
+  function trierListe(l){ return l.slice().sort(function(a,b){ var da=String(a.date||''), db=String(b.date||''); return triDate==='asc' ? da.localeCompare(db) : db.localeCompare(da); }); }
   function $(id){return document.getElementById(id);}
   var file=[], actif=false;
   function chargerFichier(img,src,n){
@@ -6322,6 +6324,9 @@ aside .nav button{min-height:42px;font-size:13.5px}
       b.addEventListener('click',function(){filtreOccasion=o;couleurFiltres(f);grille();});
       f.appendChild(b);
     });
+    var tri=document.createElement('button'); tri.type='button'; tri.className='alb-chip'; tri.textContent='Date ↑'; tri.setAttribute('aria-label','Trier par date');
+    tri.addEventListener('click',function(){ triDate = triDate==='asc' ? 'desc' : 'asc'; tri.textContent = triDate==='asc' ? 'Date ↑' : 'Date ↓'; grille(); });
+    f.appendChild(tri);
     var sel=document.createElement('select'); sel.className='alb-search'; sel.setAttribute('aria-label','Décennie');
     sel.innerHTML='<option value="">Toutes les décennies</option>';
     body.appendChild(f); f.appendChild(sel);
@@ -6346,6 +6351,7 @@ aside .nav button{min-height:42px;font-size:13.5px}
         if(q){var s=(p.caption+' '+p.place+' '+(p.personIds||[]).map(nom).join(' ')).toLowerCase(); if(s.indexOf(q)<0) return false;}
         return true;
       });
+      liste=trierListe(liste); vueListe=liste;
       count.textContent=liste.length+' photo'+(liste.length>1?'s':'')+' sur '+DATA.photos.length;
       if(!liste.length){var e=document.createElement('div');e.className='alb-empty';e.textContent='Aucune photo pour ce filtre.';grid.appendChild(e);return;}
       liste.forEach(function(p){
@@ -6365,6 +6371,7 @@ aside .nav button{min-height:42px;font-size:13.5px}
   }
   function ouvrirPhoto(p){
     var v=$('alb-viewer'); if(!v) return;
+    vueIndex = vueListe.indexOf(p); if(vueIndex<0) vueIndex=0;
     $('alb-img').src=srcDe(p); $('alb-img').alt=p.caption||'';
     $('alb-title').textContent=p.caption||'Sans légende';
     $('alb-meta').textContent=[p.date,p.place,p.occasion].filter(Boolean).join(' · ');
@@ -6373,7 +6380,7 @@ aside .nav button{min-height:42px;font-size:13.5px}
     v.classList.add('on'); $('alb-close').focus();
   }
   function fermer(){var v=$('alb-viewer');if(v)v.classList.remove('on');}
-  document.addEventListener('keydown',function(e){var v=$('alb-viewer');if(!v||!v.classList.contains('on'))return;if(e.key==='Escape'){e.preventDefault();fermer();}});
+  document.addEventListener('keydown',function(e){var v=$('alb-viewer');if(!v||!v.classList.contains('on'))return;if(e.key==='Escape'){e.preventDefault();fermer();return;}if((e.key==='ArrowRight'||e.key==='ArrowLeft')&&vueListe.length){e.preventDefault();var n=vueListe.length;vueIndex=(vueIndex+(e.key==='ArrowRight'?1:-1)+n)%n;ouvrirPhoto(vueListe[vueIndex]);}});
   document.addEventListener('click',function(e){if(e.target===$('alb-viewer'))fermer();});
   document.getElementById('alb-close').addEventListener('click',fermer);
   // entrée de menu + onglet
@@ -6453,3 +6460,51 @@ aside .nav button{min-height:42px;font-size:13.5px}
 .arch-help li b{color:var(--ink)}
 .arch-help-note{margin:6px 0 0;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
 </style>
+
+<style id="pages-options-css">
+.pg-opt{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 18px}
+.pg-opt-input{flex:1;min-width:220px;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--white);color:var(--ink);font:13px inherit;font-family:inherit}
+.pg-opt-input::placeholder{color:#9aa5ad}
+.pg-opt-count{font-size:12.5px;color:var(--muted);white-space:nowrap}
+.pg-opt-btn{min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);font:500 13px inherit;font-family:inherit;cursor:pointer}
+.pg-opt-btn:hover{border-color:var(--green)}
+</style>
+<script id="pages-options">(function(){
+  'use strict';
+  function actif(){var b=document.querySelector('.pg-tabs button.on');return b?b.getAttribute('data-page'):null;}
+  function retirer(){var b=document.querySelector('.pg-opt');if(b)b.remove();}
+  function filtrer(input,compte){
+    var q=input.value.trim().toLowerCase();
+    var lignes=[].slice.call(document.querySelectorAll('#pg-body .pg-row'));
+    var vus=0;
+    lignes.forEach(function(l){var ok=!q||l.textContent.toLowerCase().indexOf(q)>=0;l.hidden=!ok;if(ok)vus++;});
+    if(compte)compte.textContent=q?(vus+' sur '+lignes.length):'';
+    var vide=document.getElementById('pg-opt-vide');
+    if(q&&vus===0){ if(!vide){vide=document.createElement('p');vide.id='pg-opt-vide';vide.className='pg-empty';vide.textContent='Aucun résultat pour cette recherche.';var body=document.getElementById('pg-body');body.appendChild(vide);} }
+    else if(vide){vide.remove();}
+  }
+  function installer(){
+    var body=document.getElementById('pg-body'); var p=actif();
+    if(!body||!p||(p!=='noms'&&p!=='lieux')){retirer();return;}
+    if(body.querySelector('.pg-opt')) return;
+    var bar=document.createElement('div'); bar.className='pg-opt';
+    var input=document.createElement('input'); input.type='search'; input.className='pg-opt-input';
+    input.placeholder=(p==='noms')?'Filtrer un nom…':'Filtrer un lieu…';
+    input.setAttribute('aria-label',input.placeholder);
+    var compte=document.createElement('span'); compte.className='pg-opt-count';
+    var imprimer=document.createElement('button'); imprimer.type='button'; imprimer.className='pg-opt-btn'; imprimer.textContent='Imprimer';
+    imprimer.addEventListener('click',function(){window.print();});
+    input.addEventListener('input',function(){filtrer(input,compte);});
+    bar.appendChild(input); bar.appendChild(compte); bar.appendChild(imprimer);
+    var ancre=body.children[1]||body.firstChild;
+    body.insertBefore(bar,ancre);
+  }
+  function surveiller(){
+    var body=document.getElementById('pg-body');
+    if(!body) return;
+    new MutationObserver(function(){ setTimeout(installer,30); }).observe(body,{childList:true});
+  }
+  document.addEventListener('click',function(e){ if(e.target.closest&&e.target.closest('.pg-tabs button')) setTimeout(installer,60); },true);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',surveiller);else surveiller();
+  setTimeout(installer,1200);
+})();</script>
