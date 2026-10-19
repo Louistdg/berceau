@@ -39,7 +39,7 @@
 
 - **Type** : aucune
 - **Chemin ou nom de la base** : sans objet côté serveur. Les arbres sont dans le **localStorage** du navigateur, clé `arbres.v1`
-- **Taille** : la page `deploy/index.html` pèse **763 389 octets** et contient le jeu de démonstration fictif (la copie de travail `app/index.html` faisait 762 903 octets avant l'ajout du favicon et le déplacement du bouton d'export)
+- **Taille** : la page `deploy/index.html` pèse **804 017 octets** et contient le jeu de démonstration fictif (la copie de travail `app/index.html` faisait 762 903 octets avant l'ajout du favicon et le déplacement du bouton d'export)
 - **Export fourni dans** : `database/AUCUNE.txt`
 - **Migrations / schéma** : aucune. Format des données décrit dans `data/schema.md` (non inclus dans le zip : dossier de données)
 - **Sauvegardes existantes** : copies HTML datées dans `sauvegardes/` sur le poste du propriétaire (non incluses : données réelles)
@@ -145,16 +145,16 @@ Les deux erreurs console viennent du **serveur statique de test** (il ne sert ni
   - le code de la page est stocké dans des **variables d'environnement** Railway (10 morceaux base64), pas dans un dépôt : il faut repartir de `app/index.html` ;
   - **une seule page de 762 Ko** : aucun build, mais chaque modification est un remplacement de fichier complet ;
   - les données vivent dans le **navigateur** (localStorage/IndexedDB) : rien à migrer côté serveur, mais rien à sauvegarder côté serveur non plus.
-- **Ce qui doit rester identique** : la page et ses écrans, les 8 thèmes, les pages « Les noms / Chronologie / Les lieux », l'import GEDCOM, les données fictives de démonstration.
+- **Ce qui doit rester identique** : la page et ses écrans, les 11 thèmes, les pages « Les noms / Chronologie / Les lieux / Nos souvenirs », l'import GEDCOM, les données fictives de démonstration.
 - **Ce qui peut changer** : le mode de service. Pour la démo, un simple serveur statique suffit ; l'API de contributions n'est utile qu'à l'arbre familial.
 
 ## 12. Ce qui marche, ce qui ne marche pas
 
-- **Fonctionnalités opérationnelles** : arbre et navigation, fiches, recherche, 8 thèmes, pages Les noms / Chronologie / Les lieux, calendrier familial, vue éventail, masquer les vivants, import GEDCOM (modèle de données aligné le 18/10), export SVG, impression, sauvegarde `.berceau`, photos locales.
+- **Fonctionnalités opérationnelles** : arbre et navigation, fiches, recherche, 11 thèmes, pages Les noms / Chronologie / Les lieux / Nos souvenirs, calendrier familial, vue éventail, masquer les vivants, import GEDCOM (modèle de données aligné le 18/10), export SVG, impression, sauvegarde `.berceau`, photos locales.
 - **Fonctionnalités cassées** : néant constaté sur la page. En revanche **le serveur n'est pas portable en l'état** (Bun) et le démarrage sous Node est un échec mesuré.
 - **Contournements connus** : servir `app/index.html` en statique (ce qui a été testé ici).
-- **Dettes techniques** : page unique de 762 Ko ; code ajouté par blocs successifs (le fichier contient plusieurs couches de correctifs) ; données en localStorage (perdues si l'on change d'appareil) ; serveur propre à Bun ; `APP_CHUNK_*` comme mécanisme de déploiement. Le dépôt GitHub (`main`, commit `7ec2793`) contient une page de **433 Ko**, antérieure à la version locale de **762 Ko** : il est en retard, le zip est la référence (voir `git-repo.txt`).
-- **Sécurité** : `noindex` + `robots.txt` fermé (volontaire pour une démo) ; pas de compte utilisateur ; le PIN ne protège que l'arbre familial ; aucun secret dans le zip.
+- **Dettes techniques** : page unique de 785 Ko ; code ajouté par blocs successifs (le fichier contient plusieurs couches de correctifs) ; données en localStorage (perdues si l'on change d'appareil) ; serveur propre à Bun ; `APP_CHUNK_*` comme mécanisme de déploiement. Le dépôt GitHub `Louistdg/berceau` est à jour (commit `d5d5dd6`, page de **804 Ko**), ainsi que le site en ligne.
+- **Sécurité** : en-têtes `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options` et CSP validés sur O2switch ; `noindex` + `robots.txt` fermé (volontaire pour une démo) ; pas de compte utilisateur ; le PIN ne protège que l'arbre familial ; aucun secret dans le zip.
 
 ## 13. Checklist avant migration
 
