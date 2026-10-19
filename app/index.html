@@ -4171,6 +4171,17 @@ aside [data-archives-nav]{min-height:44px!important}
     <div id="arch-body" aria-live="polite">
       <p class="arch-empty">Chargement du guide des archives…</p>
     </div>
+    <section class="arch-help" aria-labelledby="arch-help-titre">
+      <h2 id="arch-help-titre">Si un lien ne s'ouvre pas</h2>
+      <ul>
+        <li><b>Il demande un compte.</b> FamilySearch, Geneanet ou Filae demandent une inscription <b>gratuite</b> : c'est leur façon de limiter la charge. Créez le compte, vous gardez l'accès.</li>
+        <li><b>Page « 403 » ou « accès refusé ».</b> Le site bloque les visites automatisées, ou votre bloqueur de publicité s'en mêle. Ouvrez le lien dans un nouvel onglet, désactivez le bloqueur, réessayez.</li>
+        <li><b>Accès réservé à un pays ou à une salle de lecture.</b> Certaines archives ne se consultent que sur place, ou depuis le pays. Vérifiez la salle de lecture de la commune ou des archives départementales.</li>
+        <li><b>Le lien a changé.</b> Les sites d'archives réorganisent souvent leurs adresses. Cherchez « archives + nom de la commune » dans un moteur de recherche : vous retrouverez le bon portail.</li>
+        <li><b>L'acte n'est pas en ligne.</b> Écrivez à la commune (service état civil) ou aux archives : demandez une copie intégrale. C'est souvent gratuit, parfois quelques euros.</li>
+      </ul>
+      <p class="arch-help-note">Un lien vraiment mort ? Signalez-le : il sera corrigé à la prochaine mise à jour. Les 403 de FamilySearch et Geneanet sont des protections anti-robot, pas des liens cassés.</p>
+    </section>
   </main>
 </section>
 <script id="berceau-archives-data" type="application/json"></script>
@@ -6432,4 +6443,13 @@ aside .nav button{min-height:42px;font-size:13.5px}
 .arch-types-grid b{display:block;font-size:13.5px;margin-bottom:3px}
 .arch-types-grid span{display:block;font-size:12.5px;line-height:1.45;color:var(--muted)}
 .arch-types-note{margin:0 0 14px;font-size:12.5px;line-height:1.5;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+</style>
+
+<style id="arch-help-css">
+.arch-help{margin:34px 0 10px;border:1px solid var(--line);border-radius:12px;background:var(--white);padding:18px 20px}
+.arch-help h2{font:600 17px/1.25 Georgia,serif;margin:0 0 10px}
+.arch-help ul{margin:0;padding-left:18px}
+.arch-help li{margin:0 0 9px;font-size:13.5px;line-height:1.5;color:var(--muted)}
+.arch-help li b{color:var(--ink)}
+.arch-help-note{margin:6px 0 0;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
 </style>
