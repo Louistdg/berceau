@@ -259,3 +259,26 @@ Content-Security-Policy: default-src 'self'; img-src 'self' data: blob:; style-s
 | Focus carte | `rgb(216,195,154)`, 3 px |
 | CSP + application | arbre, 11 thèmes, pages : OK |
 | Erreurs console | aucune |
+
+## 19. Album de famille « Nos souvenirs » (lot 1) — 19/10/2026 21 h 30
+
+Suite de la mission de découverte Perplexity : la recommandation retenue est l'**album de famille**. Lot 1 livré :
+
+- page **Nos souvenirs** (quatrième page de la famille, à côté de Noms / Chronologie / Lieux) ;
+- filtres par **occasion** (Mariage, Groupe, Portrait, Lieu, Document), par **décennie** et recherche **personne ou lieu** ;
+- **visionneuse** : image, légende, date, lieu, occasion, personnes identifiées (Échap ferme, focus sur Fermer) ;
+- section **Photos** sur chaque fiche, avec les photos où la personne est identifiée ;
+- **10 planches de démonstration** (illustrations sepia, pas des photographies) intégrées en data URI : aucune requête image, donc aucun 429 d'O2switch ;
+- manifeste `data/album-photos.json` + repli intégré `<script id="berceau-album-data">`, même mécanique que le guide des archives.
+
+Vérifications en ligne :
+
+| Contrôle | 1440 px | 390 px |
+|---|---|---|
+| Photos affichées | 10 / 10 | 10 / 10 |
+| Débordement | aucun | aucun |
+| Erreurs console | aucune | aucune |
+| Visionneuse | ouvre, ferme (Échap) | idem |
+
+- Captures : `captures/live-souvenirs-1440.png`, `captures/live-souvenirs-390.png`.
+- **Reste le lot 2** : préparation locale (ajout, compression, EXIF), export `album-photos.json` + images, extension `.berceau`, guide de publication.

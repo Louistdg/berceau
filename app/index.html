@@ -5776,7 +5776,8 @@ aside .nav button{min-height:42px;font-size:13.5px}
         extras = document.createElement('div'); extras.className='nav'; extras.setAttribute('data-extras','');
         var reperes = aside.querySelectorAll('.section-label');
         var avant = reperes.length > 1 ? reperes[1] : null;
-        if(avant){ aside.insertBefore(lab, avant); aside.insertBefore(extras, avant); }
+        var parent = avant && avant.parentNode ? avant.parentNode : aside;
+        if(avant){ parent.insertBefore(lab, avant); parent.insertBefore(extras, avant); }
         else { aside.appendChild(lab); aside.appendChild(extras); }
       }
       ids.forEach(function(id){ var b=document.getElementById(id); if(b && b.parentElement!==extras) extras.appendChild(b); });
@@ -6226,3 +6227,184 @@ aside .nav button{min-height:42px;font-size:13.5px}
 :root[data-theme="archive"] #tree .person.focused .card-face,:root[data-theme="archive"] #tree .person:focus-visible .card-face{stroke:#e0bc4a!important;stroke-width:3px!important}
 :root[data-theme="carbone"] #tree .person.focused .card-face,:root[data-theme="carbone"] #tree .person:focus-visible .card-face{stroke:#d8c39a!important;stroke-width:3px!important}
 </style>
+
+<style id="album-souvenirs">
+.alb-lead{color:var(--muted);margin:0 0 18px;max-width:70ch}
+.alb-filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 9px}
+.alb-chip{min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);font:500 13px/1 inherit;font-family:inherit;cursor:pointer}
+.alb-chip.on{background:var(--green);color:#17130f;border-color:var(--green);font-weight:700}
+.alb-search{min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--white);color:var(--ink);font-family:inherit;font-size:13px;min-width:220px}
+.alb-search::placeholder{color:#9aa5ad}
+.alb-count{color:var(--muted);font-size:13px;margin:6px 0 18px}
+.alb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.alb-card{display:flex;flex-direction:column;gap:8px;padding:0;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer;font-family:inherit}
+.alb-card img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:var(--white)}
+.alb-card:hover img,.alb-card:focus-visible img{border-color:var(--green)}
+.alb-card b{font:600 14px/1.3 inherit;display:block}
+.alb-card span{font-size:12px;color:var(--muted)}
+.alb-empty{padding:40px 20px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);text-align:center}
+#alb-viewer{position:fixed;inset:0;z-index:80;background:#000000cc;display:none;align-items:center;justify-content:center;padding:20px}
+#alb-viewer.on{display:flex}
+.alb-dialog{background:var(--paper);border:1px solid var(--line);border-radius:14px;max-width:900px;width:100%;max-height:92vh;overflow:auto;padding:16px;position:relative}
+.alb-dialog img{width:100%;height:auto;max-height:66vh;object-fit:contain;border-radius:8px;background:var(--white)}
+.alb-dialog h2{font:600 20px/1.25 Georgia,serif;margin:14px 0 4px}
+.alb-dialog .meta{color:var(--muted);font-size:13px;margin:0 0 10px}
+.alb-people{display:flex;flex-wrap:wrap;gap:6px}
+.alb-people span{border:1px solid var(--line);border-radius:999px;padding:5px 10px;font-size:12px;color:var(--ink)}
+.alb-close{position:absolute;top:10px;right:10px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--white);color:var(--ink);font-size:20px;line-height:1;cursor:pointer}
+@media(max-width:600px){.alb-grid{grid-template-columns:1fr}.alb-dialog{padding:12px}.alb-dialog h2{font-size:18px}}
+</style>
+<div id="alb-viewer" role="dialog" aria-modal="true" aria-labelledby="alb-title"><div class="alb-dialog"><button class="alb-close" id="alb-close" aria-label="Fermer">×</button><img id="alb-img" alt=""><h2 id="alb-title"></h2><p class="meta" id="alb-meta"></p><div class="alb-people" id="alb-people"></div></div></div>
+<script id="berceau-album-data" type="application/json">{"version":1,"misAJour":"2026-10","treeId":"demo","photos":[{"id":"ph01","file":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDgwIiB2aWV3Qm94PSIwIDAgNjQwIDQ4MCI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjY0MCIgaGVpZ2h0PSI0ODAiIGZpbGw9IiNlZmU2ZDIiLz48cmVjdCB4PSIxNCIgeT0iMTQiIHdpZHRoPSI2MTIiIGhlaWdodD0iNDUyIiBmaWxsPSJub25lIiBzdHJva2U9IiNjYmI4OTQiIHN0cm9rZS13aWR0aD0iMiIvPjxyZWN0IHg9IjIyIiB5PSIyMiIgd2lkdGg9IjU5NiIgaGVpZ2h0PSI0MzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZDJiNCIgc3Ryb2tlLXdpZHRoPSIxIi8+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNmI1NTM1IiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PGNpcmNsZSBjeD0iMjgwIiBjeT0iMjQwIiByPSI1MiIvPjxjaXJjbGUgY3g9IjM2MCIgY3k9IjI0MCIgcj0iNTIiLz48cGF0aCBkPSJNMjgwIDE4OCBsLTE0IC0yNiBNMzYwIDE4OCBsMTQgLTI2Ii8+PC9nPjx0ZXh0IHg9IjYxMCIgeT0iNDUyIiB0ZXh0LWFuY2hvcj0iZW5kIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIxMSIgZmlsbD0iI2EwOGM2NiIgbGV0dGVyLXNwYWNpbmc9IjEuNSI+QkVSQ0VBVSDCtyBEw4lNT05TVFJBVElPTjwvdGV4dD48L3N2Zz4=","caption":"Mariage de Gabriel et Louise","date":"1972","place":"Dinant","occasion":"Mariage","personIds":["P0003","P0002"]},{"id":"ph02","file":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDgwIiB2aWV3Qm94PSIwIDAgNjQwIDQ4MCI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjY0MCIgaGVpZ2h0PSI0ODAiIGZpbGw9IiNlZmU2ZDIiLz48cmVjdCB4PSIxNCIgeT0iMTQiIHdpZHRoPSI2MTIiIGhlaWdodD0iNDUyIiBmaWxsPSJub25lIiBzdHJva2U9IiNjYmI4OTQiIHN0cm9rZS13aWR0aD0iMiIvPjxyZWN0IHg9IjIyIiB5PSIyMiIgd2lkdGg9IjU5NiIgaGVpZ2h0PSI0MzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZDJiNCIgc3Ryb2tlLXdpZHRoPSIxIi8+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNmI1NTM1IiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMjAwIiByPSIyNiIvPjxwYXRoIGQ9Ik0xNjQgMzAwIHEzNiAtNDYgNzIgMCIvPjxjaXJjbGUgY3g9IjMyMCIgY3k9IjE4NiIgcj0iMzAiLz48cGF0aCBkPSJNMjc4IDMwMCBxNDIgLTU0IDg0IDAiLz48Y2lyY2xlIGN4PSI0NDAiIGN5PSIyMDAiIHI9IjI2Ii8+PHBhdGggZD0iTTQwNCAzMDAgcTM2IC00NiA3MiAwIi8+PC9nPjx0ZXh0IHg9IjYxMCIgeT0iNDUyIiB0ZXh0LWFuY2hvcj0iZW5kIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIxMSIgZmlsbD0iI2EwOGM2NiIgbGV0dGVyLXNwYWNpbmc9IjEuNSI+QkVSQ0VBVSDCtyBEw4lNT05TVFJBVElPTjwvdGV4dD48L3N2Zz4=","caption":"Réunion de famille chez Madeleine","date":"1968","place":"Mazée","occasion":"Groupe","personIds":["P0006","P0007","P0003"]},{"id":"ph03","file":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDgwIiB2aWV3Qm94PSIwIDAgNjQwIDQ4MCI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjY0MCIgaGVpZ2h0PSI0ODAiIGZpbGw9IiNlZmU2ZDIiLz48cmVjdCB4PSIxNCIgeT0iMTQiIHdpZHRoPSI2MTIiIGhlaWdodD0iNDUyIiBmaWxsPSJub25lIiBzdHJva2U9IiNjYmI4OTQiIHN0cm9rZS13aWR0aD0iMiIvPjxyZWN0IHg9IjIyIiB5PSIyMiIgd2lkdGg9IjU5NiIgaGVpZ2h0PSI0MzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZDJiNCIgc3Ryb2tlLXdpZHRoPSIxIi8+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNmI1NTM1IiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PGNpcmNsZSBjeD0iMzIwIiBjeT0iMjAwIiByPSI1OCIvPjxwYXRoIGQ9Ik0yNDAgMzgwIHE4MCAtOTAgMTYwIDAiLz48cGF0aCBkPSJNMjkwIDE1MCBxMzAgLTM0IDYwIDAiLz48L2c+PHRleHQgeD0iNjEwIiB5PSI0NTIiIHRleHQtYW5jaG9yPSJlbmQiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLHNlcmlmIiBmb250LXNpemU9IjExIiBmaWxsPSIjYTA4YzY2IiBsZXR0ZXItc3BhY2luZz0iMS41Ij5CRVJDRUFVIMK3IETDiU1PTlNUUkFUSU9OPC90ZXh0Pjwvc3ZnPg==","caption":"Portrait d’Henri Boisvert","date":"1938","place":"Mazée","occasion":"Portrait","personIds":["P0007"]},{"id":"ph04","file":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDgwIiB2aWV3Qm94PSIwIDAgNjQwIDQ4MCI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjY0MCIgaGVpZ2h0PSI0ODAiIGZpbGw9IiNlZmU2ZDIiLz48cmVjdCB4PSIxNCIgeT0iMTQiIHdpZHRoPSI2MTIiIGhlaWdodD0iNDUyIiBmaWxsPSJub25lIiBzdHJva2U9IiNjYmI4OTQiIHN0cm9rZS13aWR0aD0iMiIvPjxyZWN0IHg9IjIyIiB5PSIyMiIgd2lkdGg9IjU5NiIgaGVpZ2h0PSI0MzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZDJiNCIgc3Ryb2tlLXdpZHRoPSIxIi8+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNmI1NTM1IiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIwMCAzMDAgdi05MCBsMTIwIC03MCAxMjAgNzAgdjkwIHoiLz48cGF0aCBkPSJNMjkwIDMwMCB2LTcwIGg2MCB2NzAiLz48cGF0aCBkPSJNMjI4IDIyMCBoMzQgdjM0IGgtMzQgeiIvPjxwYXRoIGQ9Ik0zNzggMjIwIGgzNCB2MzQgaC0zNCB6Ii8+PHBhdGggZD0iTTE2MCAzMDAgaDMyMCIvPjwvZz48dGV4dCB4PSI2MTAiIHk9IjQ1MiIgdGV4dC1hbmNob3I9ImVuZCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiNhMDhjNjYiIGxldHRlci1zcGFjaW5nPSIxLjUiPkJFUkNFQVUgwrcgRMOJTU9OU1RSQVRJT048L3RleHQ+PC9zdmc+","caption":"La maison de la rue des Tanneurs","date":"1954","place":"Dinant","occasion":"Lieu","personIds":["P0003","P0002"]},{"id":"ph05","file":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDgwIiB2aWV3Qm94PSIwIDAgNjQwIDQ4MCI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjY0MCIgaGVpZ2h0PSI0ODAiIGZpbGw9IiNlZmU2ZDIiLz48cmVjdCB4PSIxNCIgeT0iMTQiIHdpZHRoPSI2MTIiIGhlaWdodD0iNDUyIiBmaWxsPSJub25lIiBzdHJva2U9IiNjYmI4OTQiIHN0cm9rZS13aWR0aD0iMiIvPjxyZWN0IHg9IjIyIiB5PSIyMiIgd2lkdGg9IjU5NiIgaGVpZ2h0PSI0MzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZDJiNCIgc3Ryb2tlLXdpZHRoPSIxIi8+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNmI1NTM1IiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTI0MCAxMzAgaDEzMCBsNDAgNDAgdjE4MCBoLTE3MCB6Ii8+PHBhdGggZD0iTTM3MCAxMzAgdjQwIGg0MCIvPjxwYXRoIGQ9Ik0yNzAgMjIwIGgxMjAgTTI3MCAyNTAgaDEyMCBNMjcwIDI4MCBoOTAiLz48Y2lyY2xlIGN4PSIzNTAiIGN5PSIzMjAiIHI9IjE4Ii8+PC9nPjx0ZXh0IHg9IjYxMCIgeT0iNDUyIiB0ZXh0LWFuY2hvcj0iZW5kIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIxMSIgZmlsbD0iI2EwOGM2NiIgbGV0dGVyLXNwYWNpbmc9IjEuNSI+QkVSQ0VBVSDCtyBEw4lNT05TVFJBVElPTjwvdGV4dD48L3N2Zz4=","caption":"Acte de naissance de Jean","date":"2000","place":"Charleroi","occasion":"Document","personIds":["P0001"]},{"id":"ph06","file":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDgwIiB2aWV3Qm94PSIwIDAgNjQwIDQ4MCI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjY0MCIgaGVpZ2h0PSI0ODAiIGZpbGw9IiNlZmU2ZDIiLz48cmVjdCB4PSIxNCIgeT0iMTQiIHdpZHRoPSI2MTIiIGhlaWdodD0iNDUyIiBmaWxsPSJub25lIiBzdHJva2U9IiNjYmI4OTQiIHN0cm9rZS13aWR0aD0iMiIvPjxyZWN0IHg9IjIyIiB5PSIyMiIgd2lkdGg9IjU5NiIgaGVpZ2h0PSI0MzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZDJiNCIgc3Ryb2tlLXdpZHRoPSIxIi8+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNmI1NTM1IiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTMyMCAxNTAgdjEyMCBNMjkwIDE5MCBoNjAiLz48cGF0aCBkPSJNMzIwIDI3MCB2NDAiLz48cGF0aCBkPSJNMjEwIDMzMCBxMCAtNTAgNDQgLTUwIHE0NCAwIDQ0IDUwIHoiLz48cGF0aCBkPSJNNDAwIDMzMCBxMCAtNDAgMzYgLTQwIHEzNiAwIDM2IDQwIHoiLz48cGF0aCBkPSJNMTcwIDMzMCBoMzIwIi8+PC9nPjx0ZXh0IHg9IjYxMCIgeT0iNDUyIiB0ZXh0LWFuY2hvcj0iZW5kIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIxMSIgZmlsbD0iI2EwOGM2NiIgbGV0dGVyLXNwYWNpbmc9IjEuNSI+QkVSQ0VBVSDCtyBEw4lNT05TVFJBVElPTjwvdGV4dD48L3N2Zz4=","caption":"Le carré de famille, Doische","date":"1998","place":"Doische","occasion":"Lieu","personIds":["P0004"]},{"id":"ph07","file":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDgwIiB2aWV3Qm94PSIwIDAgNjQwIDQ4MCI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjY0MCIgaGVpZ2h0PSI0ODAiIGZpbGw9IiNlZmU2ZDIiLz48cmVjdCB4PSIxNCIgeT0iMTQiIHdpZHRoPSI2MTIiIGhlaWdodD0iNDUyIiBmaWxsPSJub25lIiBzdHJva2U9IiNjYmI4OTQiIHN0cm9rZS13aWR0aD0iMiIvPjxyZWN0IHg9IjIyIiB5PSIyMiIgd2lkdGg9IjU5NiIgaGVpZ2h0PSI0MzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZDJiNCIgc3Ryb2tlLXdpZHRoPSIxIi8+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNmI1NTM1IiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIwMCAyNTAgaDI0MCBNMjIwIDI1MCBsLTIwIDgwIE00MjAgMjUwIGwyMCA4MCIvPjxwYXRoIGQ9Ik0yOTAgMjUwIHEwIC01MCA2MCAtNTAgcTYwIDAgNjAgNTAiLz48cGF0aCBkPSJNMzAwIDIwMCBxNTAgLTE4IDEwMCAwIi8+PHBhdGggZD0iTTMyMCAxNzAgdi0zMCBNMzYwIDE3MCB2LTMwIi8+PC9nPjx0ZXh0IHg9IjYxMCIgeT0iNDUyIiB0ZXh0LWFuY2hvcj0iZW5kIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIxMSIgZmlsbD0iI2EwOGM2NiIgbGV0dGVyLXNwYWNpbmc9IjEuNSI+QkVSQ0VBVSDCtyBEw4lNT05TVFJBVElPTjwvdGV4dD48L3N2Zz4=","caption":"Pique-nique du 14 juillet","date":"1961","place":"Romedenne","occasion":"Groupe","personIds":["P0005","P0004","P0002"]},{"id":"ph08","file":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDgwIiB2aWV3Qm94PSIwIDAgNjQwIDQ4MCI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjY0MCIgaGVpZ2h0PSI0ODAiIGZpbGw9IiNlZmU2ZDIiLz48cmVjdCB4PSIxNCIgeT0iMTQiIHdpZHRoPSI2MTIiIGhlaWdodD0iNDUyIiBmaWxsPSJub25lIiBzdHJva2U9IiNjYmI4OTQiIHN0cm9rZS13aWR0aD0iMiIvPjxyZWN0IHg9IjIyIiB5PSIyMiIgd2lkdGg9IjU5NiIgaGVpZ2h0PSI0MzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZDJiNCIgc3Ryb2tlLXdpZHRoPSIxIi8+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNmI1NTM1IiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTI1MCAzMDAgcTAgLTYwIDcwIC02MCBxNzAgMCA3MCA2MCB6Ii8+PHBhdGggZD0iTTMyMCAyNDAgdi05MCIvPjxwYXRoIGQ9Ik0zMjAgMTUwIHEtMzAgLTEwIC0yMCAtNDAiLz48cGF0aCBkPSJNMjAwIDMyMCBoMjQwIi8+PC9nPjx0ZXh0IHg9IjYxMCIgeT0iNDUyIiB0ZXh0LWFuY2hvcj0iZW5kIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIxMSIgZmlsbD0iI2EwOGM2NiIgbGV0dGVyLXNwYWNpbmc9IjEuNSI+QkVSQ0VBVSDCtyBEw4lNT05TVFJBVElPTjwvdGV4dD48L3N2Zz4=","caption":"Baptême de Louise","date":"1976","place":"Dinant","occasion":"Mariage","personIds":["P0002","P0003"]},{"id":"ph09","file":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDgwIiB2aWV3Qm94PSIwIDAgNjQwIDQ4MCI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjY0MCIgaGVpZ2h0PSI0ODAiIGZpbGw9IiNlZmU2ZDIiLz48cmVjdCB4PSIxNCIgeT0iMTQiIHdpZHRoPSI2MTIiIGhlaWdodD0iNDUyIiBmaWxsPSJub25lIiBzdHJva2U9IiNjYmI4OTQiIHN0cm9rZS13aWR0aD0iMiIvPjxyZWN0IHg9IjIyIiB5PSIyMiIgd2lkdGg9IjU5NiIgaGVpZ2h0PSI0MzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZDJiNCIgc3Ryb2tlLXdpZHRoPSIxIi8+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNmI1NTM1IiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTI1MCAxOTAgaDgwIHYyNiBoLTgwIHoiLz48cGF0aCBkPSJNMjkwIDIxNiB2OTAiLz48cGF0aCBkPSJNMzYwIDIwMCBsNzAgNjAgLTIwIDIyIC03MCAtNjAgeiIvPjxwYXRoIGQ9Ik0yMjAgMzMwIGgyMjAiLz48L2c+PHRleHQgeD0iNjEwIiB5PSI0NTIiIHRleHQtYW5jaG9yPSJlbmQiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLHNlcmlmIiBmb250LXNpemU9IjExIiBmaWxsPSIjYTA4YzY2IiBsZXR0ZXItc3BhY2luZz0iMS41Ij5CRVJDRUFVIMK3IETDiU1PTlNUUkFUSU9OPC90ZXh0Pjwvc3ZnPg==","caption":"L’atelier de Charles Valmont","date":"1959","place":"Romedenne","occasion":"Portrait","personIds":["P0005"]},{"id":"ph10","file":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDgwIiB2aWV3Qm94PSIwIDAgNjQwIDQ4MCI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjY0MCIgaGVpZ2h0PSI0ODAiIGZpbGw9IiNlZmU2ZDIiLz48cmVjdCB4PSIxNCIgeT0iMTQiIHdpZHRoPSI2MTIiIGhlaWdodD0iNDUyIiBmaWxsPSJub25lIiBzdHJva2U9IiNjYmI4OTQiIHN0cm9rZS13aWR0aD0iMiIvPjxyZWN0IHg9IjIyIiB5PSIyMiIgd2lkdGg9IjU5NiIgaGVpZ2h0PSI0MzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZDJiNCIgc3Ryb2tlLXdpZHRoPSIxIi8+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNmI1NTM1IiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE1MCAzMDAgcTQwIC0yNiA4MCAwIHQ4MCAwIHQ4MCAwIHQ4MCAwIi8+PHBhdGggZD0iTTE1MCAzMzYgcTQwIC0yNiA4MCAwIHQ4MCAwIHQ4MCAwIHQ4MCAwIi8+PHBhdGggZD0iTTMyMCAzMDAgdi05MCIvPjxwYXRoIGQ9Ik0yODAgMjEwIHE0MCAtNDAgODAgMCB6Ii8+PHBhdGggZD0iTTIwMCAzMDAgbDQwIC03MCA0MCA3MCIvPjwvZz48dGV4dCB4PSI2MTAiIHk9IjQ1MiIgdGV4dC1hbmNob3I9ImVuZCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiNhMDhjNjYiIGxldHRlci1zcGFjaW5nPSIxLjUiPkJFUkNFQVUgwrcgRMOJTU9OU1RSQVRJT048L3RleHQ+PC9zdmc+","caption":"Vacances à la mer du Nord","date":"1965","place":"Ostende","occasion":"Groupe","personIds":["P0006","P0007","P0001"]}]}</script>
+<script id="album-souvenirs-script">(function(){
+  'use strict';
+  var DATA=null, chargement=false, erreur=null, filtreOccasion='Tous', filtreDecennie='', filtrePersonne='';
+  function $(id){return document.getElementById(id);}
+  var file=[], actif=false;
+  function chargerFichier(img,src,n){
+    img.onload=function(){img.onerror=null;};
+    img.onerror=function(){
+      if(n<3){ setTimeout(function(){ chargerFichier(img,src+'?r='+(n+1)+'-'+Date.now(),n+1); }, 900*(n+1)); }
+    };
+    img.src=src;
+  }
+  function fileAttente(img,src){ file.push({img:img,src:src}); if(!actif) suivant(); }
+  function suivant(){
+    if(!file.length){actif=false;return;}
+    actif=true; var j=file.shift(); chargerFichier(j.img,j.src,0);
+    setTimeout(suivant,260);
+  }
+
+  function personnes(){var D=window.FAMILY_DATA;return (D&&D.people)||[];}
+  function srcDe(p){ var s=p&&p.file?String(p.file):''; return s.indexOf('data:')===0 ? s : '../data/'+s; }
+  function nom(id){var p=personnes().find(function(x){return x.id===id;});return p?p.name:id;}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];});}
+  function charger(){
+    if(DATA||chargement) return Promise.resolve(DATA);
+    chargement=true;
+    var inline=document.getElementById('berceau-album-data');
+    if(inline&&inline.textContent.trim()){
+      try{ var d=JSON.parse(inline.textContent); if(d&&Array.isArray(d.photos)){ DATA=d; return Promise.resolve(DATA); } }catch(e){}
+    }
+    return fetch('../data/album-photos.json',{cache:'no-cache'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(function(d){DATA=d&&Array.isArray(d.photos)?d:null;return DATA;}).catch(function(e){erreur=e;DATA=null;return null;});
+  }
+  function afficher(){
+    var body=$('pg-body'); if(!body) return;
+    body.replaceChildren();
+    var h=document.createElement('h1'); h.textContent='Nos souvenirs'; body.appendChild(h);
+    var lead=document.createElement('p'); lead.className='alb-lead'; lead.textContent='Les photos de la famille, avec leur contexte : qui, quand, où. Une image peut concerner plusieurs personnes.'; body.appendChild(lead);
+    var f=document.createElement('div'); f.className='alb-filters';
+    ['Tous','Mariage','Groupe','Portrait','Lieu','Document'].forEach(function(o){
+      var b=document.createElement('button'); b.type='button'; b.className='alb-chip'+(o===filtreOccasion?' on':''); b.textContent=o;
+      b.addEventListener('click',function(){filtreOccasion=o;couleurFiltres(f);grille();});
+      f.appendChild(b);
+    });
+    var sel=document.createElement('select'); sel.className='alb-search'; sel.setAttribute('aria-label','Décennie');
+    sel.innerHTML='<option value="">Toutes les décennies</option>';
+    body.appendChild(f); f.appendChild(sel);
+    var inp=document.createElement('input'); inp.type='search'; inp.className='alb-search'; inp.placeholder='Une personne, un lieu…'; inp.value=filtrePersonne; inp.setAttribute('aria-label','Rechercher une personne ou un lieu');
+    inp.addEventListener('input',function(){filtrePersonne=inp.value;grille();}); f.appendChild(inp);
+    var count=document.createElement('p'); count.className='alb-count'; body.appendChild(count);
+    var grid=document.createElement('div'); grid.className='alb-grid'; body.appendChild(grid);
+    body.appendChild(Object.assign(document.createElement('p'),{className:'pg-foot',textContent:'Album publié en fichiers statiques. Aucune donnée ne quitte votre appareil.'}));
+    function couleurFiltres(cont){[].forEach.call(cont.querySelectorAll('.alb-chip'),function(b){b.classList.toggle('on',b.textContent===filtreOccasion);});}
+    function grille(){
+      grid.replaceChildren();
+      if(!DATA){ var v=document.createElement('div'); v.className='alb-empty'; v.textContent=erreur?'Aucun album publié pour cet arbre.':'Chargement de l’album…'; grid.appendChild(v); count.textContent=''; return; }
+      var decennies={};
+      DATA.photos.forEach(function(p){var y=parseInt(String(p.date||'').slice(0,4),10); if(y){var d=Math.floor(y/10)*10; decennies[d]=1;}});
+      var courant=sel.value;
+      sel.innerHTML='<option value="">Toutes les décennies</option>'+Object.keys(decennies).sort().map(function(d){return '<option value="'+d+'">'+d+'–'+(+d+9)+'</option>';}).join('');
+      sel.value=courant||filtreDecennie;
+      var q=filtrePersonne.trim().toLowerCase();
+      var liste=DATA.photos.filter(function(p){
+        if(filtreOccasion!=='Tous'&&p.occasion!==filtreOccasion) return false;
+        if(sel.value){var y=parseInt(String(p.date||'').slice(0,4),10); if(!y||Math.floor(y/10)*10!==+sel.value) return false;}
+        if(q){var s=(p.caption+' '+p.place+' '+(p.personIds||[]).map(nom).join(' ')).toLowerCase(); if(s.indexOf(q)<0) return false;}
+        return true;
+      });
+      count.textContent=liste.length+' photo'+(liste.length>1?'s':'')+' sur '+DATA.photos.length;
+      if(!liste.length){var e=document.createElement('div');e.className='alb-empty';e.textContent='Aucune photo pour ce filtre.';grid.appendChild(e);return;}
+      liste.forEach(function(p){
+        var b=document.createElement('button'); b.type='button'; b.className='alb-card';
+        var img=document.createElement('img'); img.src=srcDe(p); img.alt=p.caption||'Photo de famille'; img.loading='lazy';
+        img.addEventListener('error',function(){img.style.opacity=.25;});
+        var cap=document.createElement('b'); cap.textContent=p.caption||'Sans légende';
+        var meta=document.createElement('span'); meta.textContent=[p.date,p.place,p.occasion].filter(Boolean).join(' · ');
+        b.appendChild(img); b.appendChild(cap); b.appendChild(meta);
+        b.addEventListener('click',function(){ouvrirPhoto(p);});
+        grid.appendChild(b);
+      });
+    }
+    sel.addEventListener('change',function(){filtreDecennie=sel.value;grille();});
+    grille();
+    charger().then(grille);
+  }
+  function ouvrirPhoto(p){
+    var v=$('alb-viewer'); if(!v) return;
+    $('alb-img').src=srcDe(p); $('alb-img').alt=p.caption||'';
+    $('alb-title').textContent=p.caption||'Sans légende';
+    $('alb-meta').textContent=[p.date,p.place,p.occasion].filter(Boolean).join(' · ');
+    var gens=$('alb-people'); gens.replaceChildren();
+    (p.personIds||[]).forEach(function(id){var s=document.createElement('span');s.textContent=nom(id);gens.appendChild(s);});
+    v.classList.add('on'); $('alb-close').focus();
+  }
+  function fermer(){var v=$('alb-viewer');if(v)v.classList.remove('on');}
+  document.addEventListener('keydown',function(e){var v=$('alb-viewer');if(!v||!v.classList.contains('on'))return;if(e.key==='Escape'){e.preventDefault();fermer();}});
+  document.addEventListener('click',function(e){if(e.target===$('alb-viewer'))fermer();});
+  document.getElementById('alb-close').addEventListener('click',fermer);
+  // entrée de menu + onglet
+  function installer(){
+    var aside=document.querySelector('aside'); if(!aside) return;
+    if(!aside.querySelector('[data-ouvre="souvenirs"]')){
+      var navs=aside.querySelectorAll('.nav');
+      var nav=aside.querySelector('.nav [data-ouvre]') ? aside.querySelector('.nav [data-ouvre]').parentElement : (navs[navs.length-1]||null);
+      if(nav&&!nav.querySelector('[data-ouvre="souvenirs"]')){var b=document.createElement('button');b.type='button';b.setAttribute('data-ouvre','souvenirs');b.textContent='Nos souvenirs';nav.appendChild(b);}
+    }
+    var tabs=document.querySelector('.pg-tabs');
+    if(tabs&&!tabs.querySelector('[data-page="souvenirs"]')){var t2=document.createElement('button');t2.type='button';t2.setAttribute('data-page','souvenirs');t2.textContent='Nos souvenirs';tabs.appendChild(t2);}
+  }
+  document.addEventListener('click',function(e){
+    var t=e.target.closest?e.target.closest('[data-page="souvenirs"],[data-ouvre="souvenirs"]'):null;
+    if(!t) return;
+    e.preventDefault(); e.stopPropagation();
+    var s=document.getElementById('pages'); if(!s) return;
+    s.classList.add('on'); try{document.getElementById('layout')?.setAttribute('inert','');}catch(x){}
+    document.querySelectorAll('.pg-tabs button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-page')==='souvenirs');});
+    afficher();
+    var back=document.getElementById('pg-back'); if(back) back.focus({preventScroll:true});
+  },true);
+  // Photos sur la fiche d une personne
+  function photosDe(nomComplet){
+    if(!DATA) return [];
+    var p=personnes().find(function(x){return x.name===nomComplet;});
+    if(!p) return [];
+    return DATA.photos.filter(function(ph){return (ph.personIds||[]).indexOf(p.id)>=0;});
+  }
+  function injecterPhotos(){
+    var panel=document.getElementById('panel');
+    if(!panel||!panel.classList.contains('open')) return;
+    var h2=panel.querySelector('h2'); if(!h2) return;
+    var dialog=panel; if(!dialog||dialog.querySelector('.alb-fiche')) return;
+    var liste=photosDe(h2.textContent.trim());
+    if(!liste.length) return;
+    var wrap=document.createElement('div'); wrap.className='alb-fiche';
+    var titre=document.createElement('h3'); titre.textContent='Photos'; wrap.appendChild(titre);
+    var g=document.createElement('div'); g.className='alb-fiche-grid';
+    liste.forEach(function(ph){
+      var b=document.createElement('button'); b.type='button'; b.className='alb-thumb'; b.title=ph.caption||'';
+      var img=document.createElement('img'); img.src=srcDe(ph); img.alt=ph.caption||''; img.loading='lazy';
+      b.appendChild(img); b.addEventListener('click',function(){ouvrirPhoto(ph);});
+      g.appendChild(b);
+    });
+    wrap.appendChild(g); dialog.appendChild(wrap);
+  }
+  var obs=new MutationObserver(function(){ setTimeout(injecterPhotos,60); });
+  function surveiller(){var p=document.getElementById('panel'); if(p) obs.observe(p,{childList:true,subtree:true});}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',surveiller);else surveiller();
+  setTimeout(surveiller,1200);
+  charger().then(function(){ setTimeout(injecterPhotos,150); });
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',installer);else installer();
+  setTimeout(installer,900);setTimeout(installer,2500);
+})();</script>
+<style id="album-fiche-css">.alb-fiche{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}.alb-fiche h3{font:600 15px/1.2 Georgia,serif;margin:0 0 8px}.alb-fiche-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.alb-thumb{padding:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--white);cursor:pointer;aspect-ratio:4/3}.alb-thumb img{width:100%;height:100%;object-fit:cover;display:block}</style>
