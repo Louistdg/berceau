@@ -13,7 +13,7 @@ Arbre généalogique en ligne, en français, pensé pour des familles : lecture 
 - recherche, annuaire, calendrier familial ;
 - pages de lecture : **Les noms**, **Chronologie**, **Les lieux**, **Nos souvenirs** (album familial) ;
 - **11 thèmes** de couleurs, **Archive** (serif, or) par défaut ;
-- **album familial** : photos légendées, filtres par occasion/décennie/personne, visionneuse, photos sur les fiches ;
+- **album familial** : photos légendées, filtres par occasion/décennie/personne, visionneuse, photos sur les fiches ;\n- **photos sur l'arbre** : chaque personne avec une photo personnelle s'affiche en bulle ronde sur sa carte ;\n- **mariages** : année et durée sur le lien de couple, détail dans la fiche ;\n- **page « Où trouver un acte »** : guide des archives (46 pays) et quel acte chercher où ;
 - import **GEDCOM** (`.ged`) et export SVG ;
 - sauvegarde `.berceau` (arbre + photos) ;
 - impression.
@@ -23,7 +23,7 @@ Arbre généalogique en ligne, en français, pensé pour des familles : lecture 
 Une seule page HTML autonome, sans framework, sans dépendance, sans build :
 
 ```
-app/index.html   ~804 Ko   l'application entière
+app/index.html   ~811 Ko   l'application entière
 app/favicon.svg
 data/demo.ged    fichier GEDCOM fictif (7 personnes) pour tester l'import
 data/liens-archives.json   annuaire de portails d'archives (page « Chercher un acte »)

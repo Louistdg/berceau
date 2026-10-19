@@ -282,3 +282,16 @@ Vérifications en ligne :
 
 - Captures : `captures/live-souvenirs-1440.png`, `captures/live-souvenirs-390.png`.
 - **Reste le lot 2** : préparation locale (ajout, compression, EXIF), export `album-photos.json` + images, extension `.berceau`, guide de publication.
+
+## 20. Photos sur l'arbre, alliances et confort mobile — 20/10/2026 01 h 00
+
+- **Bulles photo** : la photo personnelle d'une personne (stockée localement en IndexedDB) s'affiche en **rond sur sa carte**, à la place du portrait dessiné, avec un anneau doré. Sans photo, le portrait dessiné reste.
+- **Alliance + durée** sur chaque lien de couple : deux anneaux entrelacés et le nombre d'années (« 64 ans », « 51 ans », « 28 ans »), calculé jusqu'à aujourd'hui ou jusqu'au décès/divorce.
+- **Mariage dans la fiche** : année + durée (« Mariage : 1998 · 28 ans de mariage »).
+- **Menu mobile corrigé** : opaque, 360 px, sous l'en-tête, boutons lisibles (plus de bloc blanc), section DÉCOUVRIR remontée (Nos souvenirs et Où trouver un acte visibles sans défiler).
+- **Fiche personne plein écran sur téléphone** (au lieu d'un tiroir de 440 px coupé).
+- **Visionneuse photo devant les pages** (z-index 200 — elle s'ouvrait derrière, donc invisible).
+- **Bouton « Copier le lien de cette photo »** explicite (or, icône 🔗) + phrase d'aide dans l'album.
+- Trois dates de mariage fictives ajoutées à la démo (1962, 1975, 1998) pour que les alliances soient visibles.
+
+Version en ligne : **830 518 octets**. Captures : `captures/live-alliance-1440.png`, `captures/live-alliance-390.png`, `captures/bulles-demo-1440.png`, `captures/live-fiche-mobile-390.png`.

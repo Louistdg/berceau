@@ -39,7 +39,7 @@
 
 - **Type** : aucune
 - **Chemin ou nom de la base** : sans objet côté serveur. Les arbres sont dans le **localStorage** du navigateur, clé `arbres.v1`
-- **Taille** : la page `deploy/index.html` pèse **804 017 octets** et contient le jeu de démonstration fictif (la copie de travail `app/index.html` faisait 762 903 octets avant l'ajout du favicon et le déplacement du bouton d'export)
+- **Taille** : la page `deploy/index.html` pèse **830 518 octets** et contient le jeu de démonstration fictif (la copie de travail `app/index.html` faisait 762 903 octets avant l'ajout du favicon et le déplacement du bouton d'export)
 - **Export fourni dans** : `database/AUCUNE.txt`
 - **Migrations / schéma** : aucune. Format des données décrit dans `data/schema.md` (non inclus dans le zip : dossier de données)
 - **Sauvegardes existantes** : copies HTML datées dans `sauvegardes/` sur le poste du propriétaire (non incluses : données réelles)
@@ -150,10 +150,10 @@ Les deux erreurs console viennent du **serveur statique de test** (il ne sert ni
 
 ## 12. Ce qui marche, ce qui ne marche pas
 
-- **Fonctionnalités opérationnelles** : arbre et navigation, fiches, recherche, 11 thèmes, pages Les noms / Chronologie / Les lieux / Nos souvenirs, calendrier familial, vue éventail, masquer les vivants, import GEDCOM (modèle de données aligné le 18/10), export SVG, impression, sauvegarde `.berceau`, photos locales.
+- **Fonctionnalités opérationnelles** : arbre et navigation, fiches, recherche, 11 thèmes, pages Les noms / Chronologie / Les lieux / Nos souvenirs / Où trouver un acte, mariage (année + durée), bulles photo sur les cartes, calendrier familial, vue éventail, masquer les vivants, import GEDCOM (modèle de données aligné le 18/10), export SVG, impression, sauvegarde `.berceau`, photos locales.
 - **Fonctionnalités cassées** : néant constaté sur la page. En revanche **le serveur n'est pas portable en l'état** (Bun) et le démarrage sous Node est un échec mesuré.
 - **Contournements connus** : servir `app/index.html` en statique (ce qui a été testé ici).
-- **Dettes techniques** : page unique de 785 Ko ; code ajouté par blocs successifs (le fichier contient plusieurs couches de correctifs) ; données en localStorage (perdues si l'on change d'appareil) ; serveur propre à Bun ; `APP_CHUNK_*` comme mécanisme de déploiement. Le dépôt GitHub `Louistdg/berceau` est à jour (commit `d5d5dd6`, page de **804 Ko**), ainsi que le site en ligne.
+- **Dettes techniques** : page unique de 811 Ko ; code ajouté par blocs successifs (le fichier contient plusieurs couches de correctifs) ; données en localStorage (perdues si l'on change d'appareil) ; serveur propre à Bun ; `APP_CHUNK_*` comme mécanisme de déploiement. Le dépôt GitHub `Louistdg/berceau` est à jour (commit `d5d5dd6`, page de **804 Ko**), ainsi que le site en ligne.
 - **Sécurité** : en-têtes `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options` et CSP validés sur O2switch ; `noindex` + `robots.txt` fermé (volontaire pour une démo) ; pas de compte utilisateur ; le PIN ne protège que l'arbre familial ; aucun secret dans le zip.
 
 ## 13. Checklist avant migration
