@@ -238,3 +238,24 @@ Vérifications en ligne :
 
 - Cinq directions dessinées : Herbier, Minuit, Sauge claire, Atelier, Archive (`captures/CINQ-DIRECTIONS.png`).
 - Fichiers sources des maquettes : `out/maquettes/*.html` (hors dépôt).
+
+## 18. En-têtes de sécurité et focus 3 px — 19/10/2026 21 h 10
+
+- **m5 corrigé** : le `.htaccess` échouait à cause du **BOM UTF-8** en tête de fichier (erreur 500), pas des directives. Réécrit en ASCII pur :
+
+```
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+X-Frame-Options: SAMEORIGIN
+Content-Security-Policy: default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'self'
+```
+
+- Vérifié : page 200, les quatre en-têtes présents, application fonctionnelle sous CSP (arbre, panneau des 11 thèmes, pages Noms/Chronologie/Lieux), aucune erreur console.
+- **M2 complété** : contour de focus à **3 px** (et non 1,5) sur les thèmes Archive et Carbone, doré `#e0bc4a` / `#d8c39a`.
+
+| Contrôle | Résultat |
+|---|---|
+| En-têtes HTTP | 4/4 présents |
+| Focus carte | `rgb(216,195,154)`, 3 px |
+| CSP + application | arbre, 11 thèmes, pages : OK |
+| Erreurs console | aucune |
