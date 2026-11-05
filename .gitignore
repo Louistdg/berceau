@@ -3,4 +3,15 @@ sauvegardes/
 _ancien-prototype/
 *.log
 .env
+.env.*
+!.env.example
+*.berceau
+/app/index.origine.html
+/data/demo-arbre.json
+/captures/
+/validation/
+/work/
+/outputs/
+/checkpoint-*/
+/data/demo.json
 SECRETS-LOCAL.txt
