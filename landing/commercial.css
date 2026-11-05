@@ -1,0 +1,84 @@
+/* Berceau — présentation commerciale locale, sans dépendance externe. */
+:root{color-scheme:light;--papier:#f6f5f0;--encre:#203a34;--vert:#275447;--doux:#e6ebe2;--carte:#fffef9;--ligne:#cdd3c8;--secondaire:#52635b;--accent:#866638}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{margin:0;background:var(--papier);color:var(--encre);font:17px/1.7 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+a{color:inherit;text-underline-offset:5px}
+a:hover{text-decoration-thickness:2px}
+a:focus-visible,summary:focus-visible{outline:3px solid var(--vert);outline-offset:5px}
+h1,h2,h3,p,figure{margin:0}
+h1,h2,h3,.marque{font-family:Georgia,"Times New Roman",serif;font-weight:400}
+h1,h2,h3{line-height:1.12;text-wrap:balance}
+h1{font-size:clamp(2.7rem,5.7vw,4.8rem);letter-spacing:-.045em}
+h1 em{color:var(--vert);font-weight:400}
+h2{font-size:clamp(2rem,3.8vw,3.1rem);letter-spacing:-.03em}
+h3{font-size:1.65rem;letter-spacing:-.015em}
+p{max-width:42em}
+.conteneur{width:min(1160px,calc(100% - 56px));margin-inline:auto}
+.section{padding-block:88px}
+.surtitre{font-size:.75rem;font-weight:650;letter-spacing:.16em;text-transform:uppercase;margin-bottom:20px;color:var(--secondaire)}
+.intro{color:var(--secondaire);margin-top:22px;max-width:42em}
+.bouton{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:12px 22px;border:1px solid var(--ligne);border-radius:8px;background:var(--carte);text-decoration:none;font-size:.94rem;font-weight:650;line-height:1.4;text-align:center;transition:background .18s,box-shadow .18s}
+.bouton:hover{background:var(--doux);box-shadow:0 5px 16px #203a3410}
+.bouton.principal{background:var(--vert);border-color:var(--vert);color:#fff}
+.bouton.principal:hover{background:var(--encre)}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
+.note{font-size:.82rem;line-height:1.65;color:var(--secondaire);margin-top:18px}
+.evitement{position:absolute;left:16px;top:-150px;background:var(--carte);padding:12px;z-index:10}
+.evitement:focus{top:12px}
+.entete{border-bottom:1px solid var(--ligne)}
+.entete .conteneur{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-block:22px}
+.marque{display:inline-flex;gap:10px;align-items:center;font-size:2rem;letter-spacing:-.04em;text-decoration:none}
+.sceau{display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--vert);border-radius:50%;font-size:1.4rem;line-height:1}
+.navigation{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.navigation>a{font-size:.88rem;text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.heros{display:grid;grid-template-columns:1.08fr .92fr;gap:58px;align-items:center;padding-block:86px}
+.heros .accroche{font-size:1.16rem;line-height:1.7;color:var(--secondaire);margin-top:28px}
+.album{background:var(--doux);border:1px solid var(--ligne);border-radius:150px 150px 16px 16px;padding:50px 24px 24px;transform:rotate(1deg)}
+.album-titre{text-align:center;font:1.5rem/1.4 Georgia,serif;margin:0 0 28px}
+.arbre{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 16px;position:relative}
+.personne{position:relative;background:var(--carte);padding:20px 10px;border:1px solid var(--ligne);border-radius:10px;text-align:center;box-shadow:0 5px 12px #203a3406}
+.portrait{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;margin:0 auto 12px;background:var(--doux);font:1.3rem Georgia,serif}
+.personne strong{display:block;font:1.05rem/1.4 Georgia,serif;overflow-wrap:anywhere}
+.personne small{display:block;font-size:.75rem;color:var(--secondaire);margin-top:5px}
+.enfant{grid-column:1/-1;width:72%;justify-self:center;border-color:var(--vert)}
+.enfant:before{content:"";position:absolute;left:50%;top:-37px;height:36px;width:1px;background:var(--vert)}
+.album figcaption{text-align:center;font-size:.75rem;color:var(--secondaire);margin-top:22px}
+.reperes{border-block:1px solid var(--ligne)}
+.reperes ul{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;list-style:none;padding-block:20px;margin-block:0;font-size:.88rem;color:var(--secondaire)}
+.grille{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px;margin-top:42px}
+.benefice{padding-top:26px;border-top:1px solid var(--ligne)}
+.numero{display:block;color:var(--accent);font-size:.78rem;letter-spacing:.12em;margin-bottom:20px}
+.benefice p{color:var(--secondaire);margin-top:16px;font-size:.94rem}
+.fonctionnement{background:var(--vert);color:var(--carte);border-radius:16px;padding:clamp(28px,5vw,60px);display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.fonctionnement .surtitre{color:#d4dfd4}
+.fonctionnement p{margin-top:22px}
+.etapes{margin:0;padding-left:24px}
+.etapes li{padding:16px 0 16px 8px;border-bottom:1px solid #ffffff40}
+.etapes li:last-child{border-bottom:0}
+.etapes strong{display:block;font-weight:650}
+.etapes span{font-size:.9rem;color:#e2e9df}
+.offre{display:flex;flex-direction:column;padding:30px;background:var(--carte);border:1px solid var(--ligne);border-radius:14px}
+.offre.recommandee{border:2px solid var(--vert);background:var(--doux)}
+.etiquette{font-size:.75rem;font-weight:650;color:var(--secondaire);margin-bottom:18px}
+.offre h3{font-size:1.9rem}
+.offre>p{font-size:.9rem;color:var(--secondaire);margin-top:14px}
+.montant{font-size:2.7rem;line-height:1.25;margin-top:24px;font-variant-numeric:tabular-nums;letter-spacing:-.04em}
+.montant small{font-size:.9rem;letter-spacing:0;color:var(--secondaire)}
+.offre ul{padding-left:20px;margin:24px 0 30px;font-size:.9rem}
+.offre li{padding-block:5px}
+.offre .bouton{margin-top:auto}
+.conditions{padding:20px 24px;border-left:3px solid var(--vert);background:var(--doux);margin-top:26px;font-size:.85rem;color:var(--encre);max-width:none}
+.questions{max-width:800px}
+.questions h2{margin-bottom:30px}
+details{border-bottom:1px solid var(--ligne);padding-block:18px}
+summary{cursor:pointer;font-weight:600;min-height:44px;padding-block:8px;line-height:1.5}
+details p{margin:12px 0 8px;color:var(--secondaire);font-size:.94rem}
+.invitation{text-align:center;border-top:1px solid var(--ligne);padding-block:64px}
+.invitation p{margin:22px auto 28px;color:var(--secondaire)}
+.pied{border-top:1px solid var(--ligne);padding-block:26px;color:var(--secondaire);font-size:.8rem}
+.pied .conteneur{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+@media(max-width:980px){.heros{gap:30px}.navigation{gap:14px}.grille{gap:16px}.offre{padding:22px}.album{padding-inline:16px}}
+@media(max-width:800px){.heros{grid-template-columns:1fr;padding-block:50px;gap:44px}.album{width:min(100%,480px);justify-self:center;transform:none}.grille{grid-template-columns:1fr;gap:24px}.fonctionnement{grid-template-columns:1fr;gap:24px}.section{padding-block:56px}.navigation .secondaire{display:none}.reperes ul{justify-content:center}.offre{padding:30px}.montant{margin-top:20px}}
+@media(max-width:480px){.conteneur{width:calc(100% - 32px)}.entete .conteneur{gap:12px;padding-block:16px}.marque{font-size:1.65rem}.sceau{width:28px;height:28px}.navigation .bouton{padding:10px 12px;font-size:.8rem}.actions{flex-direction:column}.actions .bouton{width:100%}.heros .accroche{font-size:1.05rem}.album{padding:38px 14px 20px;border-radius:110px 110px 14px 14px}.personne{padding-inline:6px}.reperes ul{display:grid;grid-template-columns:1fr 1fr;font-size:.78rem;gap:10px 20px}.conditions{padding:18px}.pied .conteneur{flex-direction:column;gap:10px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}

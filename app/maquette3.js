@@ -1,122 +1,76 @@
 (function(){
   'use strict';
-  const $=id=>document.getElementById(id);
-  const NS='http://www.w3.org/2000/svg';
-  const icons={tree:'M12 3 6 9h3l-5 6h6v6h4v-6h6l-5-6h3L12 3Z',explore:'M6 3h9l4 4v14H6V3Zm8 0v5h5M9 12h7M9 16h7',save:'M4 3h14l3 3v15H3V3h1Zm3 0v7h10V3M7 21v-7h10v7',fit:'M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6',folder:'M3 6h7l2 3h9v11H3V6Z',chevron:'m7 10 5 5 5-5',home:'m3 11 9-8 9 8M6 9v12h12V9'};
-  const icon=name=>'<svg class="m3-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="'+icons[name]+'"/></svg>';
-  function formatDate(value){const match=String(value||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!match)return value||'';return new Intl.DateTimeFormat('fr-BE',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(Date.UTC(+match[1],+match[2]-1,+match[3])));}
-  let layout,aside,panel,main,explorer=false,panelOpen=false,fitTimer;
+  const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg';
+  const paths={tree:'M12 4v5M5 16v-4l7-3 7 3v4M12 9v7M3 18a2 2 0 1 0 4 0 2 2 0 1 0-4 0M10 18a2 2 0 1 0 4 0 2 2 0 1 0-4 0M17 18a2 2 0 1 0 4 0 2 2 0 1 0-4 0M10 3a2 2 0 1 0 4 0 2 2 0 1 0-4 0',explore:'M20 20l-5-5M17 10a7 7 0 1 0-14 0 7 7 0 1 0 14 0',tools:'M8 6V3h8v3M3 7h18v14H3V7Zm0 6h18M10 11v4h4v-4',fit:'M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6',chevron:'m9 6 6 6-6 6',up:'M12 21V3m-6 6 6-6 6 6',down:'M12 3v18m-6-6 6 6 6-6',family:'M8 7a3 3 0 1 0-6 0 3 3 0 1 0 6 0M22 7a3 3 0 1 0-6 0 3 3 0 1 0 6 0M8 21v-4a4 4 0 0 0-8 0v4h8Zm16 0v-4a4 4 0 0 0-8 0v4h8M12 11a2 2 0 1 0 0 4 2 2 0 1 0 0-4M9 21v-2a3 3 0 0 1 6 0v2',edit:'m4 16 12-12 4 4L8 20H4v-4Zm10-10 4 4'};
+  const icon=name=>'<svg class="m3-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="'+paths[name]+'"/></svg>';
+  const element=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
+  const year=v=>(String(v||'').match(/\d{4}/)||[])[0]||'',place=v=>String(v||'').split(',')[0].trim();
+  const data=()=>window.berceauM3Core?.data()||window.FAMILY_DATA;
+  const portrait=p=>window.berceauMedia?.photoUrl(p.id)||window.BerceauPortraits?.url(p.id,data())||'';
+  function formatDate(value){const m=String(value||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!m)return value||'';const d=new Date(Date.UTC(+m[1],+m[2]-1,+m[3]));return Number.isNaN(d.getTime())?value:new Intl.DateTimeFormat('fr-BE',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(d);}
+  function country(p){return /Belgique|Belgium/i.test(String(p.birth?.place||''))?'Belgique':p.country||'';}
+  let layout,aside,panel,main,explorer=false,sideMode='explorer',panelOpen=false,fitTimer,profileTimer,viewSelect,portraitId=0;
   function scheduleFit(){clearTimeout(fitTimer);fitTimer=setTimeout(()=>window.berceauM3Core?.fit(),100);}
-  function setExplorer(value){explorer=!!value;document.body.classList.toggle('m3-explorer-open',explorer);$('m3-explore')?.setAttribute('aria-expanded',String(explorer));$('m3-explore')?.classList.toggle('active',explorer);$('m3-tree')?.classList.toggle('active',!explorer);if(explorer)aside?.querySelector('button')?.focus({preventScroll:true});scheduleFit();}
-  function element(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e;}
+  function setExplorer(value,mode='explorer'){
+    explorer=!!value;sideMode=mode;document.body.classList.toggle('m3-explorer-open',explorer);aside.dataset.mode=mode;
+    $('m3-explore').setAttribute('aria-expanded',String(explorer&&mode==='explorer'));$('m3-tools').setAttribute('aria-expanded',String(explorer&&mode==='tools'));
+    for(const [id,active] of [['m3-tree',!explorer],['m3-explore',explorer&&mode==='explorer'],['m3-tools',explorer&&mode==='tools']])$(id).classList.toggle('active',active);
+    aside.querySelector('.m3-explorer-heading span').textContent=mode==='tools'?'Outils':'Explorer';if(explorer)aside.querySelector('.m3-explorer-heading button').focus({preventScroll:true});scheduleFit();
+  }
+  function syncDirection(){const active=['up','down','both'].find(id=>$(id)?.classList.contains('primary'));if(active&&viewSelect)viewSelect.value=active;}
   function mount(){
-    layout=$('layout');panel=$('panel');main=layout?.querySelector('.main');aside=layout?.querySelector(':scope>aside');
-    if(!layout||!panel||!main||!aside){setTimeout(mount,80);return;}
-    if($('m3-rail'))return;
+    layout=$('layout');panel=$('panel');main=layout?.querySelector('.main');aside=layout?.querySelector(':scope>aside');if(!layout||!panel||!main||!aside){setTimeout(mount,80);return;}if($('m3-rail'))return;
     document.body.classList.add('berceau-m3');
-    const rail=element('nav','m3-rail');rail.id='m3-rail';rail.setAttribute('aria-label','Navigation principale');
-    rail.innerHTML='<button id="m3-tree" class="active" type="button">'+icon('tree')+'<span>Arbre</span></button><button id="m3-explore" type="button" aria-expanded="false" aria-controls="m3-explorer">'+icon('explore')+'<span>Explorer</span></button><div class="m3-rail-bottom"><button type="button" data-berceau-page="trees">'+icon('folder')+'<span>Mes arbres</span></button><button type="button" data-berceau-page="home">'+icon('home')+'<span>Accueil</span></button></div>';
-    layout.prepend(rail);aside.id='m3-explorer';
-    const eh=element('div','m3-explorer-heading');eh.innerHTML='<span>Explorer</span><button type="button" aria-label="Fermer Explorer">×</button>';aside.prepend(eh);eh.querySelector('button').onclick=()=>{setExplorer(false);$('m3-explore').focus();};
-    $('m3-explore').onclick=()=>setExplorer(!explorer);$('m3-tree').onclick=()=>setExplorer(false);
-    const top=document.querySelector('.top'),sw=element('button','m3-tree-switch');sw.type='button';sw.setAttribute('data-berceau-page','trees');sw.setAttribute('aria-label','Choisir ou gérer un arbre');sw.innerHTML=icon('tree')+'<span></span>'+icon('chevron');
-    let treeName='Arbre de démonstration';try{const r=JSON.parse(localStorage.getItem('arbres.v1')||'null');treeName=r?.arbres?.[r.courant||0]?.nom||treeName;}catch(e){}
-    sw.querySelector('span').textContent=treeName;top.querySelector('.search').before(sw);top.querySelector('.brand small').textContent='ARBRES FAMILIAUX';$('search').placeholder='Rechercher un nom, un lieu, une date…';
-    const save=$('share');save.innerHTML=icon('save')+'<span>Sauvegarder</span>';
-    const utilities=element('div','m3-display-options');utilities.setAttribute('aria-label','Affichage et outils');
-    for(const node of [document.querySelector('.theme-btn'),$('mermaid'),$('fan'),$('calendar'),$('hideLiving'),$('up'),$('down'),$('both'),$('center'),$('pathback')])if(node)utilities.append(node);
-    const utilitiesTitle=element('p','section-label','Affichage et outils');aside.append(utilitiesTitle,utilities);
-    const siblings=$('sib')?.closest('label');
-    if(siblings){siblings.style.marginLeft='0';siblings.classList.add('m3-siblings');utilities.append(siblings);}
-    const dock=element('div','m3-dock');dock.setAttribute('role','toolbar');dock.setAttribute('aria-label','Commandes de l’arbre');
-    const mode=element('select','m3-direction');mode.setAttribute('aria-label','Direction de l’arbre');mode.innerHTML='<option value="up">Ancêtres</option><option value="down">Descendance</option><option value="both">Vue familiale</option>';mode.onchange=()=>$(mode.value)?.click();const modes=element('div','m3-dock-group');modes.append(mode);dock.append(modes);
-    const generations=element('div','m3-dock-group');for(const node of [$('depthminus'),document.querySelector('.generation-control'),$('depthplus')])if(node)generations.append(node);dock.append(generations);
-    const zoom=element('div','m3-dock-group');for(const id of ['zoomout','zoomin'])if($(id))zoom.append($(id));dock.append(zoom);const fit=$('fit');fit.innerHTML=icon('fit');fit.setAttribute('aria-label','Tout voir');fit.title='Tout voir';dock.append(fit);main.append(dock);
-    for(const id of ['up','down','both'])$(id)?.addEventListener('click',()=>{mode.value=id;});
-    const syncPanel=()=>{const open=panel.classList.contains('open');if(open!==panelOpen){panelOpen=open;document.body.classList.toggle('m3-profile-open',open);scheduleFit();}if(open)queueProfile();};
-    new MutationObserver(syncPanel).observe(panel,{attributes:true,attributeFilter:['class'],childList:true});
-    new MutationObserver(()=>{decorateCards();}).observe($('canvas'),{childList:true});
-    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&explorer){setExplorer(false);$('m3-explore').focus();}});
-    document.addEventListener('click',e=>{if(e.target.closest('#m3-explorer [data-scope]'))setExplorer(false);});
-    syncPanel();decorateCards();scheduleFit();
+    const rail=element('nav','m3-rail');rail.id='m3-rail';rail.setAttribute('aria-label','Navigation principale');rail.innerHTML='<button id="m3-tree" class="active" type="button">'+icon('tree')+'<span>Arbre</span></button><button id="m3-explore" type="button" aria-expanded="false" aria-controls="m3-explorer">'+icon('explore')+'<span>Explorer</span></button><button id="m3-tools" type="button" aria-expanded="false" aria-controls="m3-explorer">'+icon('tools')+'<span>Outils</span></button><button id="m3-rail-toggle" type="button" aria-label="Ouvrir Explorer">'+icon('chevron')+'</button>';layout.prepend(rail);
+    aside.id='m3-explorer';aside.dataset.mode='explorer';const explorerContent=element('div','m3-explorer-content');explorerContent.append(...aside.childNodes);aside.append(explorerContent);
+    const heading=element('div','m3-explorer-heading');heading.innerHTML='<span>Explorer</span><button type="button" aria-label="Fermer le panneau">×</button>';aside.prepend(heading);heading.querySelector('button').onclick=()=>{setExplorer(false);$(sideMode==='tools'?'m3-tools':'m3-explore').focus();};
+    $('m3-tree').onclick=()=>setExplorer(false);$('m3-explore').onclick=()=>setExplorer(!explorer||sideMode!=='explorer','explorer');$('m3-tools').onclick=()=>setExplorer(!explorer||sideMode!=='tools','tools');$('m3-rail-toggle').onclick=()=>setExplorer(!explorer,'explorer');
+    const utilities=element('div','m3-display-options');utilities.setAttribute('aria-label','Outils de l’arbre');for(const node of [document.querySelector('.theme-btn'),$('mermaid'),$('fan'),$('calendar'),$('hideLiving'),$('center'),$('pathback'),$('export')])if(node)utilities.append(node);
+    const siblings=$('sib')?.closest('label');if(siblings){siblings.style.marginLeft='0';siblings.classList.add('m3-siblings');utilities.append(siblings);}for(const [page,label] of [['trees','Mes arbres'],['home','Accueil']]){const b=element('button','btn',label);b.type='button';b.dataset.berceauPage=page;utilities.append(b);}aside.append(utilities);
+    const top=document.querySelector('.top');top.querySelector('.brand small').textContent='';$('search').placeholder='Rechercher un nom, un lieu, une date…';const searchIcon=element('span','m3-search-icon');searchIcon.innerHTML=icon('explore');top.querySelector('.search').prepend(searchIcon);
+    const view=element('label','m3-view-select');view.innerHTML=icon('tree');viewSelect=element('select');viewSelect.setAttribute('aria-label','Vue de l’arbre');viewSelect.innerHTML='<option value="up">Vue ancêtres</option><option value="down">Vue descendance</option><option value="both">Vue familiale</option>';viewSelect.onchange=()=>$(viewSelect.value)?.click();view.append(viewSelect);top.querySelector('.topactions').prepend(view);$('share').textContent='Sauvegarder';
+    const toolbar=element('div','m3-canvas-toolbar'),tabs=element('div','m3-view-tabs');tabs.setAttribute('role','group');tabs.setAttribute('aria-label','Direction de l’arbre');for(const [id,label,ico] of [['up','Ancêtres','up'],['down','Descendance','down'],['both','Vue familiale','family']]){const node=$(id);node.innerHTML=icon(ico)+'<span>'+label+'</span>';tabs.append(node);node.addEventListener('click',syncDirection);}
+    const controls=element('div','m3-canvas-controls'),fit=$('fit');controls.setAttribute('role','toolbar');controls.setAttribute('aria-label','Cadrage de l’arbre');for(const node of [$('zoomout'),document.querySelector('.generation-control'),$('zoomin'),fit])if(node)controls.append(node);fit.innerHTML=icon('fit');fit.setAttribute('aria-label','Tout voir');fit.title='Tout voir';for(const id of ['depthminus','depthplus'])if($(id))utilities.append($(id));toolbar.append(tabs,controls);main.append(toolbar);
+    const theme=utilities.querySelector('.theme-btn');if(theme){theme.setAttribute('aria-label','Changer de thème');theme.title='Changer de thème';const label=element('span','m3-theme-label','Thèmes');theme.prepend(label);rail.insertBefore(theme,$('m3-rail-toggle'));}
+    const syncPanel=()=>{const open=panel.classList.contains('open');if(open!==panelOpen){panelOpen=open;document.body.classList.toggle('m3-profile-open',open);scheduleFit();}if(open)queueProfile();};new MutationObserver(syncPanel).observe(panel,{attributes:true,attributeFilter:['class'],childList:true,subtree:true});new MutationObserver(()=>{decorateCards();syncDirection();}).observe($('canvas'),{childList:true});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&explorer){setExplorer(false);$('m3-explore').focus();}});document.addEventListener('click',e=>{if(e.target.closest('#m3-explorer [data-scope]'))setExplorer(false);});syncPanel();decorateCards();syncDirection();scheduleFit();
   }
   function decorateCards(){
-    const data=window.berceauM3Core?.data()||window.FAMILY_DATA;const people=new Map((data?.people||[]).map(p=>[p.id,p]));
-    document.querySelectorAll('#tree .person').forEach(g=>{
-      if(g.dataset.m3Card)return;g.dataset.m3Card='1';const p=people.get(g.dataset.person),face=g.querySelector('.card-face');if(!p||!face)return;
-      const x=+face.getAttribute('x'),y=+face.getAttribute('y'),w=+face.getAttribute('width');
-      if(w<200)return;
-      g.querySelectorAll('.tname,.tdates').forEach(n=>n.remove());
-      function text(value,dx,dy,cls,size){const t=document.createElementNS(NS,'text');t.setAttribute('class',cls);t.setAttribute('x',x+dx);t.setAttribute('y',y+dy);t.setAttribute('font-size',size);t.textContent=value;g.append(t);let short=value;while(t.getComputedTextLength()>w-dx-12&&short.length>2){short=short.slice(0,-1);t.textContent=short+'…';}}
-      const given=String(p.givenName||p.name||'').split(/\s+/)[0],surname=String(p.surname||'');
-      text(given.length>19?given.slice(0,18)+'…':given,84,32,'tname',18);if(surname)text(surname.length>19?surname.slice(0,18)+'…':surname,84,54,'tname',18);
-      const year=v=>(String(v||'').match(/\d{4}/)||[])[0]||'—';const place=v=>String(v||'').split(',')[0].trim();const compact=s=>s.length>23?s.slice(0,22)+'…':s;
-      text(compact('° '+year(p.birth?.date)+(place(p.birth?.place)?' · '+place(p.birth.place):'')),84,79,'tdates',16);
-      if(p.death?.known)text(compact('† '+year(p.death.date)+(place(p.death.place)?' · '+place(p.death.place):'')),84,100,'tdates',16);
-      const avatar=g.querySelector('.gender-avatar');if(avatar)avatar.setAttribute('transform','translate('+(x+43)+' '+(y+46)+') scale(1.85) translate('+(-x-29)+' '+(-y-24)+')');
-    });
+    const people=new Map((data()?.people||[]).map(p=>[p.id,p]));document.querySelectorAll('#tree .person').forEach(g=>{
+      if(g.dataset.m3Card)return;
+      const p=people.get(g.dataset.person),face=g.querySelector('.card-face');if(!p||!face)return;
+      const x=+face.getAttribute('x'),y=+face.getAttribute('y'),w=+face.getAttribute('width'),h=+face.getAttribute('height');if(!(w>0&&h>0))return;
+      const compact=w<200,nameX=compact?60:78,nameSize=compact?16:20,dateSize=compact?13:14,avatarX=compact?32:40,avatarY=compact?31:39,avatarSize=compact?42:58;
+      g.dataset.m3Card='1';g.dataset.m3Compact=String(compact);
+      g.querySelectorAll('.tname,.tdates,.m3-portrait,.m3-portrait-clip,:scope > text:not([class])').forEach(n=>n.remove());
+      function text(value,dx,dy,cls,size){const t=document.createElementNS(NS,'text');t.setAttribute('class',cls);t.setAttribute('x',x+dx);t.setAttribute('y',y+dy);t.setAttribute('font-size',size);t.textContent=value;g.append(t);let short=value;while(t.getComputedTextLength()>w-dx-10&&short.length>2){short=short.slice(0,-1);t.textContent=short+'…';}}
+      const firstName=String(p.givenName||p.name||'').trim().split(/\s+/)[0],surname=p.surname||(!p.givenName?String(p.name||'').trim().split(/\s+/).slice(1).join(' '):'');
+      text(firstName,nameX,compact?26:30,'tname',nameSize);if(surname)text(surname,nameX,compact?44:52,'tname',nameSize);
+      text('° '+(year(p.birth?.date)||'—')+(place(p.birth?.place)?' · '+place(p.birth.place):''),compact?14:78,compact?66:77,'tdates',dateSize);
+      if(p.death?.known)text('† '+(year(p.death.date)||'—')+(place(p.death.place)?' · '+place(p.death.place):''),compact?14:78,compact?82:98,'tdates',dateSize);
+      const location=country(p);if(location)text(location,38,h-(compact?7:14),'tdates m3-country',compact?12:14);
+      const avatar=g.querySelector('.gender-avatar'),src=portrait(p);
+      if(avatar){avatar.style.display=src?'none':'';avatar.setAttribute('transform','translate('+(x+avatarX)+' '+(y+avatarY)+') scale('+(compact?1.2:1.65)+') translate('+(-x-29)+' '+(-y-24)+')');}
+      g.querySelectorAll('.tphoto').forEach(n=>n.style.display='none');
+      if(src){const clip=document.createElementNS(NS,'clipPath'),circle=document.createElementNS(NS,'circle');clip.id='m3-face-'+(++portraitId);clip.setAttribute('class','m3-portrait-clip');circle.setAttribute('cx',x+avatarX);circle.setAttribute('cy',y+avatarY);circle.setAttribute('r',avatarSize/2-1);clip.append(circle);const im=document.createElementNS(NS,'image');im.setAttribute('class','m3-portrait');im.setAttribute('href',src);im.setAttribute('x',x+avatarX-avatarSize/2);im.setAttribute('y',y+avatarY-avatarSize/2);im.setAttribute('width',avatarSize);im.setAttribute('height',avatarSize);im.setAttribute('preserveAspectRatio','xMidYMid slice');im.setAttribute('clip-path','url(#'+clip.id+')');g.append(clip,im);}
+    });window.BerceauUnionStatus?.render($('tree'),data());
   }
-  let profileTimer;
+  function fillAvatar(node,p){node.replaceChildren();const src=portrait(p);if(src){const img=element('img');img.src=src;img.alt='';node.append(img);return;}const card=[...document.querySelectorAll('#tree .person')].find(g=>g.dataset.person===p.id),source=card?.querySelector('.gender-avatar'),face=card?.querySelector('.card-face');if(source&&face){const svg=document.createElementNS(NS,'svg'),copy=source.cloneNode(true);copy.removeAttribute('transform');copy.style.display='';const originals=[...source.querySelectorAll('*')],copies=[...copy.querySelectorAll('*')];copies.forEach((c,i)=>{const s=getComputedStyle(originals[i]);c.style.fill=s.fill;c.style.stroke=s.stroke;c.style.strokeWidth=s.strokeWidth;});svg.setAttribute('viewBox',(+face.getAttribute('x')+12)+' '+(+face.getAttribute('y')+7)+' 34 34');svg.setAttribute('aria-hidden','true');svg.append(copy);node.append(svg);}else node.textContent=String(p.givenName||p.name||'?')[0];}
   function queueProfile(){clearTimeout(profileTimer);profileTimer=setTimeout(structureProfile,80);}
   function structureProfile(){
-    if(!panel?.classList.contains('open'))return;
-    if(panel.querySelector('.m3-profile-head')){routeLateContent();return;}
-    const id=window.familySelectedPerson?.(),data=window.berceauM3Core?.data()||window.FAMILY_DATA,p=data?.people?.find(p=>p.id===id);
-    if(!p)return;
-    const title=panel.querySelector('h2'),avatar=panel.querySelector('.avatar'),dates=panel.querySelector('.dates'),originalContext=panel.querySelector('.context-note');
-    if(!title||!avatar)return;
-    const head=element('div','m3-profile-head'),identity=element('div');identity.append(title);if(dates){dates.replaceChildren();dates.append(element('div','','° '+[formatDate(p.birth?.date),p.birth?.place].filter(Boolean).join(' · ')));if(p.death?.known)dates.append(element('div','','† '+[formatDate(p.death.date),p.death.place].filter(Boolean).join(' · ')));identity.append(dates);}head.append(avatar,identity);
-    panel.querySelector('.panel-head').after(head);
-    const photo=window.berceauMedia?.photoUrl(id);avatar.replaceChildren();
-    if(photo){const img=element('img');img.src=photo;img.alt='Photo de '+p.name;avatar.append(img);}else{
-      const card=[...document.querySelectorAll('#tree .person')].find(g=>g.dataset.person===id),source=card?.querySelector('.gender-avatar'),face=card?.querySelector('.card-face');
-      if(source&&face){const svg=document.createElementNS(NS,'svg'),copy=source.cloneNode(true);copy.removeAttribute('transform');const originals=[...source.querySelectorAll('*')],copies=[...copy.querySelectorAll('*')];copies.forEach((c,i)=>{const s=getComputedStyle(originals[i]);c.style.fill=s.fill;c.style.stroke=s.stroke;c.style.strokeWidth=s.strokeWidth;});svg.setAttribute('viewBox',(+face.getAttribute('x')+12)+' '+(+face.getAttribute('y')+7)+' 34 34');svg.setAttribute('aria-hidden','true');svg.append(copy);avatar.append(svg);}else avatar.textContent=String(p.givenName||p.name||'?')[0];
-    }
-    if(originalContext)originalContext.textContent='Liens déclarés dans l’arbre. Les sources permettent de les vérifier.';
-    const tabs=element('div','m3-profile-tabs');tabs.setAttribute('role','tablist');tabs.setAttribute('aria-label','Rubriques de la fiche');
-    const content=element('div','m3-sections');content.id='m3-profile-content';content.setAttribute('role','tabpanel');
-    const remaining=[...panel.children].filter(n=>!n.classList.contains('panel-head')&&n!==head);
-    remaining.forEach(node=>{node.dataset.m3Sections=classify(node);content.append(node);});
-    head.after(tabs,content);
-    const sourceCard=[...content.querySelectorAll('.card')].find(c=>/Références/.test(c.querySelector('h3')?.textContent||'')),sourceCount=sourceCard?.querySelectorAll('.evidence').length||0;
-    if(sourceCard){sourceCard.querySelector('h3').textContent='Sources ('+sourceCount+')';sourceCard.dataset.m3Sections='overview sources';}
-    const sections=[['overview','Aperçu'],['details','Détails'],['sources','Sources ('+sourceCount+')'],['notes','Notes']];
-    for(const [key,label] of sections){const button=element('button','',label);button.type='button';button.setAttribute('role','tab');button.id='m3-tab-'+key;button.setAttribute('aria-controls','m3-profile-content');button.dataset.tab=key;button.onclick=()=>selectTab(key);button.onkeydown=e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const list=[...tabs.children],at=list.indexOf(button),next=e.key==='Home'?0:e.key==='End'?list.length-1:(at+(e.key==='ArrowRight'?1:-1)+list.length)%list.length;list[next].click();list[next].focus();};tabs.append(button);}
-    const relation=element('section','card');relation.dataset.m3Sections='overview';const relationTitle=element('h3','','Lien de parenté');relation.append(relationTitle);
-    const list=element('ol','m3-path'),persons=new Map(data.people.map(person=>[person.id,person]));
-    function step(names,label){const li=element('li');li.append(element('span','',names),element('small','',label));list.append(li);}
-    const root=persons.get(data.rootId),queue=[data.rootId],seen=new Map([[data.rootId,null]]);
-    for(let i=0;i<queue.length&&!seen.has(id);i++){const at=queue[i],person=persons.get(at);if(!person)continue;for(const key of ['parents','children','partners'])for(const next of person[key]||[]){if(!persons.has(next)||seen.has(next))continue;seen.set(next,{from:at,key});queue.push(next);}}
-    if(seen.has(id)){
-      const route=[];let at=id;while(at){route.unshift({person:persons.get(at),link:seen.get(at)});at=seen.get(at)?.from;}
-      route.forEach(({person,link})=>{if(!person)return;let label='Personne de départ';if(link){const from=persons.get(link.from),role=link.key==='parents'?(person.sex==='M'?'Père':person.sex==='F'?'Mère':'Parent'):link.key==='children'?(person.sex==='M'?'Fils':person.sex==='F'?'Fille':'Enfant'):'Partenaire';label=role+' de '+(from?.name||'la personne précédente');}step(person.name,label);});
-      if(id===data.rootId){const parents=(p.parents||[]).map(pid=>persons.get(pid)).filter(Boolean);if(parents.length)step(parents.map(q=>q.name).join(' et '),'Parents enregistrés');}
-    }else{step(p.name,'Personne sélectionnée');step('Lien non renseigné','Aucun chemin familial enregistré vers '+(root?.name||'la personne de départ'));}
-    relation.append(list);
-    const facts=element('section','card');facts.dataset.m3Sections='overview';const factsTitle=element('div','m3-card-title');factsTitle.append(element('h3','','Faits d’identité'));const edit=element('button','','Modifier');edit.type='button';edit.onclick=()=>{$('editrel')?.click();};factsTitle.append(edit);facts.append(factsTitle);
-    const dl=element('dl','m3-facts');
-    function fact(label,value,place){const row=element('div'),dd=element('dd','',value||'Non renseigné');row.append(element('dt','',label),dd);if(place)dd.append(element('small','',place));dl.append(row);}
-    fact('Naissance',formatDate(p.birth?.date),p.birth?.place);if(p.death?.known)fact('Décès',formatDate(p.death.date),p.death.place);fact('Sexe',p.sex==='M'?'Homme':p.sex==='F'?'Femme':'Non renseigné');facts.append(dl);content.prepend(relation,facts);
-    if(![...content.children].some(c=>c.dataset.m3Sections==='notes')){const empty=element('section','card');empty.dataset.m3Sections='notes';empty.append(element('h3','','Notes'),element('p','m3-empty','Aucune note enregistrée pour cette personne.'));content.append(empty);}
-    selectTab('overview');
+    if(!panel?.classList.contains('open'))return;if(panel.querySelector('.m3-profile-head')){routeLateContent();return;}const id=window.familySelectedPerson?.(),d=data(),p=d?.people?.find(p=>p.id===id);if(!p)return;const title=panel.querySelector('h2'),avatar=panel.querySelector('.avatar'),dates=panel.querySelector('.dates');if(!title||!avatar)return;
+    const head=element('div','m3-profile-head'),identity=element('div');identity.append(title);if(dates){dates.replaceChildren();dates.append(element('div','','° '+[year(p.birth?.date),place(p.birth?.place)].filter(Boolean).join(' · ')));const location=country(p);if(location)dates.append(element('div','m3-location',(location==='Belgique'?'🇧🇪  ':'')+location));identity.append(dates);}head.append(avatar,identity);panel.querySelector('.panel-head').after(head);fillAvatar(avatar,p);
+    const tabs=element('div','m3-profile-tabs');tabs.setAttribute('role','tablist');tabs.setAttribute('aria-label','Rubriques de la fiche');const content=element('div','m3-sections');content.id='m3-profile-content';content.setAttribute('role','tabpanel');[...panel.children].filter(n=>!n.classList.contains('panel-head')&&n!==head).forEach(node=>{node.dataset.m3Sections=classify(node);content.append(node);});head.after(tabs,content);
+    const context=content.querySelector('.context-note');if(context)context.textContent='Liens déclarés dans l’arbre. Les sources permettent de les vérifier.';for(const [key,label] of [['details','Détails'],['events','Événements'],['sources','Sources'],['notes','Notes']]){const b=element('button','',label);b.type='button';b.setAttribute('role','tab');b.id='m3-tab-'+key;b.setAttribute('aria-controls','m3-profile-content');b.dataset.tab=key;b.onclick=()=>selectTab(key);b.onkeydown=e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const list=[...tabs.children],at=list.indexOf(b),next=e.key==='Home'?0:e.key==='End'?list.length-1:(at+(e.key==='ArrowRight'?1:-1)+list.length)%list.length;list[next].click();list[next].focus();};tabs.append(b);}
+    const facts=element('section','m3-information');facts.dataset.m3Sections='details';const factsTitle=element('div','m3-card-title');factsTitle.append(element('h3','','Informations principales'));const edit=element('button');edit.innerHTML=icon('edit')+'<span>Modifier</span>';edit.type='button';edit.onclick=()=>$('editrel')?.click();factsTitle.append(edit);facts.append(factsTitle);const dl=element('dl','m3-facts');function fact(label,value,locality){const row=element('div'),dd=element('dd','',value||'—');row.append(element('dt','',label),dd);if(locality)dd.append(element('small','',locality));dl.append(row);}fact('Sexe',p.sex==='M'?'Masculin':p.sex==='F'?'Féminin':'—');fact('Naissance',formatDate(p.birth?.date),p.birth?.place);fact('Décès',p.death?.known?formatDate(p.death.date):'—',p.death?.known?p.death.place:'');fact('Nationalité',p.nationality||'—');facts.append(dl);
+    const persons=new Map(d.people.map(q=>[q.id,q])),families=[];for(const [match,label,key,relation] of [['Parents','Parents','parents','parent'],['Frères et sœurs','Fratrie','siblings','sibling'],['Partenaires & unions','Conjoint(e)','partners','partner'],['Enfants','Enfants','children','child']]){const section=[...content.querySelectorAll(':scope>.card')].find(c=>c.querySelector('h3')?.textContent===match);if(!section)continue;section.classList.add('m3-family');section.dataset.m3Sections='details';const h=section.querySelector('h3'),bar=element('div','m3-card-title');h.textContent=label+(key==='siblings'?' ('+(p[key]?.length||0)+')':'');h.before(bar);bar.append(h);if(key!=='parents'){const add=element('button','','＋ Ajouter');add.type='button';add.onclick=()=>openAdd(p,relation);if(relation==='sibling'&&!p.parents?.length){add.disabled=true;add.title='Renseignez un parent pour ajouter un membre de la fratrie.';}bar.append(add);}section.querySelectorAll('[data-open]').forEach(button=>{const q=persons.get(button.dataset.open);if(!q)return;const photo=element('span','m3-relative-avatar');fillAvatar(photo,q);const name=element('span','m3-relative-name',q.name);name.append(element('small','',[year(q.birth?.date),q.death?.known?year(q.death.date):''].join(' – ')));button.replaceChildren(photo,name,element('span','m3-relative-chevron','›'));});if(key==='partners'){const details=[...section.querySelectorAll('.evidence')];if(details.length){const unions=element('section','card');unions.dataset.m3Sections='events';unions.append(element('h3','','Unions'),...details);content.append(unions);}}families.push(section);}content.prepend(facts,...families);
+    if(![...content.children].some(n=>n.dataset.m3Sections==='notes')){const empty=element('section','card');empty.dataset.m3Sections='notes';empty.append(element('h3','','Notes'),element('p','m3-empty','Aucune note enregistrée pour cette personne.'));content.append(empty);}selectTab('details');
   }
-  function classify(node){
-    const heading=node.querySelector('h3')?.textContent||'';
-    if(/Références|Sources/.test(heading)||node.id==='chercheacte')return 'sources';
-    if(/Notes/.test(heading)||node.classList.contains('warn'))return 'notes';
-    return 'details';
-  }
-  function routeLateContent(){
-    const content=panel.querySelector('.m3-sections');if(!content)return;
-    for(const node of [...panel.children]){if(node===content||node.classList.contains('panel-head')||node.classList.contains('m3-profile-head')||node.classList.contains('m3-profile-tabs'))continue;node.dataset.m3Sections=classify(node);content.append(node);}
-    const photoManager=panel.querySelector('.m3-profile-head .berceau-photo-panel');if(photoManager){photoManager.dataset.m3Sections='details';content.append(photoManager);}
-    selectTab(panel.dataset.m3Tab||'overview');
-  }
-  function selectTab(key){
-    panel.dataset.m3Tab=key;
-    panel.querySelector('.m3-sections')?.setAttribute('aria-labelledby','m3-tab-'+key);
-    panel.querySelectorAll('.m3-profile-tabs button').forEach(b=>{const active=b.dataset.tab===key;b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});
-    panel.querySelectorAll('.m3-sections> *').forEach(n=>{n.hidden=!String(n.dataset.m3Sections||'details').split(' ').includes(key);});
-  }
+  function openAdd(p,relation){const anchor=relation==='sibling'?p.parents?.[0]:p.id;if(!anchor)return;const choose=()=>document.querySelector('#relchoice [data-rel="'+(relation==='sibling'?'child':relation)+'"]')?.click();if(window.berceauM3Core?.addPerson){window.berceauM3Core.addPerson(anchor);choose();return;}if(anchor!==p.id)window.berceauM3Core?.openPerson(anchor);setTimeout(()=>{$('addrel')?.click();choose();},350);}
+  function classify(node){const h=node.querySelector('h3')?.textContent||'';if(/Références|Sources/.test(h)||node.id==='chercheacte'||node.classList.contains('context-note')||node.classList.contains('note'))return 'sources';if(/Événements/.test(h))return 'events';if(/Notes/.test(h)||node.classList.contains('warn'))return 'notes';return 'details';}
+  function routeLateContent(){const content=panel.querySelector('.m3-sections');if(!content)return;for(const node of [...panel.children]){if(node===content||node.classList.contains('panel-head')||node.classList.contains('m3-profile-head')||node.classList.contains('m3-profile-tabs'))continue;node.dataset.m3Sections=classify(node);content.append(node);}const photoManager=panel.querySelector('.m3-profile-head .berceau-photo-panel');if(photoManager){photoManager.dataset.m3Sections='details';content.append(photoManager);}selectTab(panel.dataset.m3Tab||'details');}
+  function selectTab(key){panel.dataset.m3Tab=key;panel.querySelector('.m3-sections')?.setAttribute('aria-labelledby','m3-tab-'+key);panel.querySelectorAll('.m3-profile-tabs button').forEach(b=>{const active=b.dataset.tab===key;b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});panel.querySelectorAll('.m3-sections>*').forEach(n=>n.hidden=!String(n.dataset.m3Sections||'details').split(' ').includes(key));}
+  window.berceauM3RefreshPortraits=()=>{document.querySelectorAll('#tree .person').forEach(g=>delete g.dataset.m3Card);decorateCards();const people=new Map((data()?.people||[]).map(p=>[p.id,p])),p=people.get(window.familySelectedPerson?.());if(p&&panel?.querySelector('.m3-profile-head .avatar'))fillAvatar(panel.querySelector('.m3-profile-head .avatar'),p);panel?.querySelectorAll('.m3-family [data-open]').forEach(button=>{const person=people.get(button.dataset.open),avatar=button.querySelector('.m3-relative-avatar');if(person&&avatar)fillAvatar(avatar,person);});};
+  window.addEventListener('berceau-portraits-ready',()=>{if($('m3-rail'))window.berceauM3RefreshPortraits();});
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,100));else setTimeout(mount,100);
 })();
