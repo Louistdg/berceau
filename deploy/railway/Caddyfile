@@ -1,0 +1,9 @@
+http://:{$PORT:8080} {
+	root * /srv
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+	}
+	redir / /app/ 302
+	file_server
+}
